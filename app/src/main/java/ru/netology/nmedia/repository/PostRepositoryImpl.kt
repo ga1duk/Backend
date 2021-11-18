@@ -18,7 +18,7 @@ class PostRepositoryImpl : PostRepository {
     private val typeToken = object : TypeToken<List<Post>>() {}
 
     companion object {
-        private const val BASE_URL = "http://192.168.1.35:9999"
+        private const val BASE_URL = "http://192.168.42.28:9999"
         private val jsonType = "application/json".toMediaType()
     }
 
@@ -32,7 +32,7 @@ class PostRepositoryImpl : PostRepository {
             .let {
                 gson.fromJson(it, typeToken.type)
             }
-//        Тоже самое, только без let(протестить):
+//        Тоже самое, только без let:
 //        val result = client.newCall(request)
 //            .execute()
 //        val message = result.body?.string() ?: throw RuntimeException("body is null")
@@ -41,13 +41,26 @@ class PostRepositoryImpl : PostRepository {
 
     override fun likeById(id: Long) {
         // TODO: do this in homework
-//        val request: Request = Request.Builder()
-//            .post(gson.toJson(id).toRequestBody(jsonType))
-//            .url("${BASE_URL}/api/slow/posts/id/likes")
-//            .build()
-//        client.newCall(request)
-//            .execute()
-//            .close()
+            val request: Request = Request.Builder()
+                .post(gson.toJson(id).toRequestBody(jsonType))
+                .url("${BASE_URL}/api/slow/posts/$id/likes")
+                .build()
+
+            client.newCall(request)
+                .execute()
+                .close()
+        }
+
+    override fun removeLikeById(id: Long) {
+        // TODO: do this in homework
+        val request: Request = Request.Builder()
+            .delete(gson.toJson(id).toRequestBody(jsonType))
+            .url("${BASE_URL}/api/slow/posts/$id/likes")
+            .build()
+
+        client.newCall(request)
+            .execute()
+            .close()
     }
 
     override fun save(post: Post) {
