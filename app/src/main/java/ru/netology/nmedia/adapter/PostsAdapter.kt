@@ -1,5 +1,6 @@
 package ru.netology.nmedia.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -44,6 +45,7 @@ class PostViewHolder(
             // в адаптере
             like.isChecked = post.likedByMe
             like.text = "${post.likes}"
+            Log.d("dsfljksdfdk", "${post.likes}")
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {

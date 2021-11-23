@@ -36,6 +36,21 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         loadPosts()
     }
 
+    fun refreshPosts() {
+        thread {
+            // Начинаем загрузку
+            _data.postValue(FeedModel(refreshing = true))
+            try {
+                // Данные успешно получены
+                val posts = repository.getAll()
+                FeedModel(posts = posts, empty = posts.isEmpty())
+            } catch (e: IOException) {
+                // Получена ошибка
+                FeedModel(error = true)
+            }.also(_data::postValue)
+        }
+    }
+
     fun loadPosts() {
         thread {
             // Начинаем загрузку
@@ -74,23 +89,33 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        thread { repository.likeById(id) }
-    }
-
-    fun removeLikeById(id: Long) {
-        thread {
-            repository.removeLikeById(id)
+        var postLikedByMe = false
+//        val old = _data.value?.posts.orEmpty()
+        for (post in _data.value?.posts.orEmpty()) {
+            if (post.id == id) {
+//                TODO: 22.11.2021 Заменить i.likedByMe на конструкцию, которая будет работать с val likedByMe (а не var) в Post.kt
+                postLikedByMe = post.likedByMe
+                post.likedByMe = !postLikedByMe
+            }
         }
+
+        thread {
+            if (!postLikedByMe) {
+                repository.likeById(id)
+            } else {
+                repository.dislikeById(id)
+            }
+        }
+//        _data.postValue(FeedModel(posts = old))
     }
 
     fun removeById(id: Long) {
         thread {
             // Оптимистичная модель
             val old = _data.value?.posts.orEmpty()
+            val posts = old.filter { it.id != id }
             _data.postValue(
-                _data.value?.copy(posts = _data.value?.posts.orEmpty()
-                    .filter { it.id != id }
-                )
+                FeedModel(posts = posts, empty = posts.isEmpty())
             )
             try {
                 repository.removeById(id)
