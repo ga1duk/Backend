@@ -52,6 +52,7 @@ class PostViewHolder(
             val urlAvatars = "${BASE_URL}/avatars/${post.authorAvatar}"
             Glide.with(binding.avatar)
                 .load(urlAvatars)
+                .circleCrop()
                 .timeout(10_000)
                 .into(binding.avatar)
 
