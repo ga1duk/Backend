@@ -56,6 +56,12 @@ class PostViewHolder(
                 .timeout(10_000)
                 .into(binding.avatar)
 
+            val urlImages = "${BASE_URL}/images/${post.attachment?.url}"
+            Glide.with(binding.attachment)
+                .load(urlImages)
+                .timeout(10_000)
+                .into(binding.attachment)
+
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)
