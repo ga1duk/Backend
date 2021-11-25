@@ -52,8 +52,15 @@ class PostViewHolder(
             val urlAvatars = "${BASE_URL}/avatars/${post.authorAvatar}"
             Glide.with(binding.avatar)
                 .load(urlAvatars)
+                .circleCrop()
                 .timeout(10_000)
                 .into(binding.avatar)
+
+            val urlImages = "${BASE_URL}/images/${post.attachment?.url}"
+            Glide.with(binding.attachment)
+                .load(urlImages)
+                .timeout(10_000)
+                .into(binding.attachment)
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
