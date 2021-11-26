@@ -37,6 +37,21 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         loadPosts()
     }
 
+    fun refreshPosts() {
+        thread {
+            // Начинаем загрузку
+            _data.postValue(FeedModel(refreshing = true))
+            try {
+                // Данные успешно получены
+                val posts = repository.getAll()
+                FeedModel(posts = posts, empty = posts.isEmpty())
+            } catch (e: IOException) {
+                // Получена ошибка
+                FeedModel(error = true)
+            }.also(_data::postValue)
+        }
+    }
+
     fun loadPosts() {
         thread {
             // Начинаем загрузку

@@ -18,7 +18,7 @@ class PostRepositoryImpl : PostRepository {
     private val typeToken = object : TypeToken<List<Post>>() {}
 
     companion object {
-        private const val BASE_URL = "http://192.168.42.134:9999"
+        private const val BASE_URL = "http://192.168.42.177:9999"
         private val jsonType = "application/json".toMediaType()
     }
 
