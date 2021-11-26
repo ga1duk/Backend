@@ -37,21 +37,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         loadPosts()
     }
 
-    fun refreshPosts() {
-        thread {
-            // Начинаем загрузку
-            _data.postValue(FeedModel(refreshing = true))
-            try {
-                // Данные успешно получены
-                val posts = repository.getAll()
-                FeedModel(posts = posts, empty = posts.isEmpty())
-            } catch (e: IOException) {
-                // Получена ошибка
-                FeedModel(error = true)
-            }.also(_data::postValue)
-        }
-    }
-
     fun loadPosts() {
         thread {
             // Начинаем загрузку
@@ -90,24 +75,27 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        var postLikedByMe = false
-//        val old = _data.value?.posts.orEmpty()
-        for (post in _data.value?.posts.orEmpty()) {
-            if (post.id == id) {
-//                TODO: 22.11.2021 Заменить i.likedByMe на конструкцию, которая будет работать с val likedByMe (а не var) в Post.kt
-                postLikedByMe = post.likedByMe
-                post.likedByMe = !postLikedByMe
-            }
-        }
-
         thread {
-            if (!postLikedByMe) {
-                repository.likeById(id)
-            } else {
-                repository.dislikeById(id)
-            }
+            val updatedPost = repository.likeById(id)
+
+            val posts = _data.value?.posts.orEmpty()
+                .map {
+                    if (it.id == updatedPost.id) updatedPost else it
+                }
+            _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
         }
-//        _data.postValue(FeedModel(posts = old))
+    }
+
+    fun dislikeById(id: Long) {
+        thread {
+            val updatedPost = repository.dislikeById(id)
+
+            val posts = _data.value?.posts.orEmpty()
+                .map {
+                    if (it.id == updatedPost.id) updatedPost else it
+                }
+            _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
+        }
     }
 
     fun removeById(id: Long) {
