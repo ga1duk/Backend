@@ -1,6 +1,5 @@
 package ru.netology.nmedia.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -38,7 +37,7 @@ class PostViewHolder(
     private val onInteractionListener: OnInteractionListener,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    val BASE_URL = "http://192.168.42.161:9999"
+    val BASE_URL = "http://192.168.42.177:9999"
 
     fun bind(post: Post) {
         binding.apply {
