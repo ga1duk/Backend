@@ -47,7 +47,7 @@ class PostRepositoryImpl : PostRepository {
 
 //    Post::class.java
 
-    override fun likeById(id: Long, callback: PostRepository.LikeCallback) {
+    override fun likeByIdAsync(id: Long, callback: PostRepository.LikeCallback) {
         val request: Request = Request.Builder()
             .post("".toRequestBody())
             .url("${BASE_URL}/api/posts/$id/likes")
@@ -70,7 +70,7 @@ class PostRepositoryImpl : PostRepository {
             })
     }
 
-    override fun dislikeById(id: Long, callback: PostRepository.LikeCallback) {
+    override fun dislikeByIdAsync(id: Long, callback: PostRepository.LikeCallback) {
         val request: Request = Request.Builder()
             .delete()
             .url("${BASE_URL}/api/posts/$id/likes")
