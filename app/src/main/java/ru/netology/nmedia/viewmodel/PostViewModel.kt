@@ -104,15 +104,19 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun dislikeById(id: Long) {
-        thread {
-            val updatedPost = repository.dislikeById(id)
+        repository.dislikeById(id, object: PostRepository.LikeCallback {
+            override fun onSuccess(post: Post) {
+                val posts = _data.value?.posts.orEmpty()
+                    .map {
+                        if (it.id == post.id) post else it
+                    }
+                _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
+            }
 
-            val posts = _data.value?.posts.orEmpty()
-                .map {
-                    if (it.id == updatedPost.id) updatedPost else it
-                }
-            _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
-        }
+            override fun onError(e: Exception) {
+                _data.postValue(FeedModel(error = true))
+            }
+        })
     }
 
     fun removeById(id: Long) {
