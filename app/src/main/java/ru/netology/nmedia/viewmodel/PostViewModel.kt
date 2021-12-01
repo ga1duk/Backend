@@ -88,7 +88,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        repository.likeById(id, object : PostRepository.LikeCallback {
+        repository.likeByIdAsync(id, object : PostRepository.LikeCallback {
             override fun onSuccess(post: Post) {
                 val posts = _data.value?.posts.orEmpty()
                     .map {
@@ -104,7 +104,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun dislikeById(id: Long) {
-        repository.dislikeById(id, object: PostRepository.LikeCallback {
+        repository.dislikeByIdAsync(id, object: PostRepository.LikeCallback {
             override fun onSuccess(post: Post) {
                 val posts = _data.value?.posts.orEmpty()
                     .map {
