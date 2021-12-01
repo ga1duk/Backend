@@ -92,7 +92,22 @@ class PostRepositoryImpl : PostRepository {
                 }
             })
     }
-
+//    override fun saveAsync(callback: PostRepository.LikeCallback) {
+//        val request: Request = Request.Builder()
+//            .post(gson.toJson(callback).toRequestBody(jsonType))
+//            .url("${BASE_URL}/api/slow/posts")
+//            .build()
+//
+//        client.newCall(request)
+//            .enqueue(object: Callback {
+//                override fun onResponse(call: Call, response: Response) {
+//                    callback
+//                }
+//                override fun onFailure(call: Call, e: IOException) {
+//                    callback.onError(e)
+//                }
+//            })
+//    }
     override fun save(post: Post) {
         val request: Request = Request.Builder()
             .post(gson.toJson(post).toRequestBody(jsonType))
