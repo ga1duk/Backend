@@ -88,15 +88,19 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        thread {
-            val updatedPost = repository.likeById(id)
+        repository.likeById(id, object : PostRepository.LikeCallback {
+            override fun onSuccess(post: Post) {
+                val posts = _data.value?.posts.orEmpty()
+                    .map {
+                        if (it.id == post.id) post else it
+                    }
+                _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
+            }
 
-            val posts = _data.value?.posts.orEmpty()
-                .map {
-                    if (it.id == updatedPost.id) updatedPost else it
-                }
-            _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
-        }
+            override fun onError(e: Exception) {
+                _data.postValue(FeedModel(error = true))
+            }
+        })
     }
 
     fun dislikeById(id: Long) {
