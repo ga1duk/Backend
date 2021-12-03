@@ -39,8 +39,6 @@ class PostRepositoryImpl : PostRepository {
                 override fun onFailure(call: Call, e: IOException) {
                     callback.onError(e)
                 }
-
-
             })
     }
 
