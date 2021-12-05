@@ -42,7 +42,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
             }
 
-            override fun onError(e: Exception) {
+            override fun onError(t: Throwable) {
                 _data.postValue(FeedModel(error = true))
             }
 
@@ -56,7 +56,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
             }
 
-            override fun onError(e: Exception) {
+            override fun onError(t: Throwable) {
                 _data.postValue(FeedModel(error = true))
             }
 
@@ -70,7 +70,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                     _postCreated.postValue(Unit)
                 }
 
-                override fun onError(e: Exception) {
+                override fun onError(t: Throwable) {
                     _data.postValue(FeedModel(error = true))
                 }
             })
@@ -100,7 +100,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
             }
 
-            override fun onError(e: Exception) {
+            override fun onError(t: Throwable) {
                 _data.postValue(FeedModel(error = true))
             }
         })
@@ -116,7 +116,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
             }
 
-            override fun onError(e: Exception) {
+            override fun onError(t: Throwable) {
                 _data.postValue(FeedModel(error = true))
             }
         })
@@ -133,7 +133,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             override fun onSuccess() {
             }
 
-            override fun onError(e: Exception) {
+            override fun onError(t: Throwable) {
                 _data.postValue(_data.value?.copy(posts = old))
             }
         })
