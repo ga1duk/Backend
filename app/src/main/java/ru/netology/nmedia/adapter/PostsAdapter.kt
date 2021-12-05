@@ -38,7 +38,7 @@ class PostViewHolder(
     private val onInteractionListener: OnInteractionListener,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    val BASE_URL = BuildConfig.BASE_URL
+    val BASE_URL = "http://192.168.42.185:9999"
 
     fun bind(post: Post) {
         binding.apply {

@@ -9,7 +9,7 @@ import retrofit2.http.*
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.dto.Post
 
-private const val BASE_URL = "${BuildConfig.BASE_URL}/api/"
+private const val BASE_URL = "http://192.168.42.185:9999/api/"
 
 val logging = HttpLoggingInterceptor().apply {
     if(BuildConfig.DEBUG) {
