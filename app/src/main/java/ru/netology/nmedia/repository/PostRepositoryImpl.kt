@@ -19,7 +19,7 @@ class PostRepositoryImpl : PostRepository {
             }
 
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
-                callback.onError(t)
+                callback.onError(t as Exception)
             }
         })
     }
@@ -36,7 +36,7 @@ class PostRepositoryImpl : PostRepository {
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                callback.onError(t)
+                callback.onError(t as Exception)
             }
         })
     }
@@ -53,7 +53,7 @@ class PostRepositoryImpl : PostRepository {
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                callback.onError(t)
+                callback.onError(t as Exception)
             }
         })
     }
@@ -71,7 +71,7 @@ class PostRepositoryImpl : PostRepository {
             }
 
             override fun onFailure(call: Call<Post>, t: Throwable) {
-                callback.onError(t)
+                callback.onError(t as Exception)
             }
 
         })
@@ -88,7 +88,7 @@ class PostRepositoryImpl : PostRepository {
             }
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {
-                callback.onError(t)
+                callback.onError(t as Exception)
             }
         })
     }
