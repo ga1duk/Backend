@@ -45,7 +45,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             override fun onError(e: Exception) {
                 _data.postValue(FeedModel(error = true))
             }
-
         })
     }
 
@@ -59,7 +58,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             override fun onError(e: Exception) {
                 _data.postValue(FeedModel(error = true))
             }
-
         })
     }
 
