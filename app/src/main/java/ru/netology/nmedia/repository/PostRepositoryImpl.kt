@@ -62,7 +62,6 @@ class PostRepositoryImpl : PostRepository {
         PostApi.retrofitService.save(post).enqueue(object : Callback<Post> {
             override fun onResponse(call: Call<Post>, response: Response<Post>) {
                 if (!response.isSuccessful) {
-                    println(response.raw())
                     callback.onError(RuntimeException(response.message()))
                     return
                 } else {
