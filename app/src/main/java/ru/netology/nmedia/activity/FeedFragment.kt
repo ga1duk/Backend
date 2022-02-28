@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
@@ -28,43 +29,54 @@ class FeedFragment : Fragment() {
     ): View {
         val binding = FragmentFeedBinding.inflate(inflater, container, false)
 
+        binding.errorGroup.isVisible = false
+
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
             }
 
-            override fun onLike(post: Post) {
-                if (!post.likedByMe) {
-                    viewModel.likeById(post.id)
-                } else {
-                    viewModel.dislikeById(post.id)
-                }
-            }
+//            override fun onLike(post: Post) {
+//                if (!post.likedByMe) {
+//                    viewModel.likeById(post.id)
+//                } else {
+//                    viewModel.dislikeById(post.id)
+//                }
+//            }
 
-            override fun onRemove(post: Post) {
-                viewModel.removeById(post.id)
-            }
+//            override fun onRemove(post: Post) {
+//                viewModel.removeById(post.id)
+//            }
 
-            override fun onShare(post: Post) {
-                val intent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, post.content)
-                    type = "text/plain"
-                }
-
-                val shareIntent =
-                    Intent.createChooser(intent, getString(R.string.chooser_share_post))
-                startActivity(shareIntent)
-            }
+//            override fun onShare(post: Post) {
+//                val intent = Intent().apply {
+//                    action = Intent.ACTION_SEND
+//                    putExtra(Intent.EXTRA_TEXT, post.content)
+//                    type = "text/plain"
+//                }
+//
+//                val shareIntent =
+//                    Intent.createChooser(intent, getString(R.string.chooser_share_post))
+//                startActivity(shareIntent)
+//            }
         })
         binding.list.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner, { state ->
-            adapter.submitList(state.posts)
+
+        viewModel.dataState.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading
-            binding.errorGroup.isVisible = state.error
-            binding.emptyText.isVisible = state.empty
             binding.swipeRefreshLayout.isRefreshing = state.refreshing
-        })
+            binding.errorGroup.isVisible = state.error
+            if (state.error) {
+                Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_LONG)
+                    .setAction("Retry") { viewModel.loadPosts() }
+                    .show()
+            }
+        }
+
+        viewModel.data.observe(viewLifecycleOwner) { state ->
+            adapter.submitList(state.posts)
+            binding.emptyText.isVisible = state.empty
+        }
 
         binding.retryButton.setOnClickListener {
             viewModel.loadPosts()

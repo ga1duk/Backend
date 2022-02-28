@@ -1,13 +1,16 @@
-package ru.netology.nmedia.db
+package ru.netology.nmedia.database.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import ru.netology.nmedia.dao.PostDao
-import ru.netology.nmedia.entity.PostEntity
+import androidx.room.TypeConverters
+import ru.netology.nmedia.database.dao.PostDao
+import ru.netology.nmedia.database.entity.PostEntity
+import ru.netology.nmedia.database.typeconverter.AttachmentConverter
 
 @Database(entities = [PostEntity::class], version = 1)
+@TypeConverters(AttachmentConverter::class)
 abstract class AppDb : RoomDatabase() {
     abstract fun postDao(): PostDao
 
@@ -24,7 +27,7 @@ abstract class AppDb : RoomDatabase() {
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(context, AppDb::class.java, "app.db")
                 .fallbackToDestructiveMigration()
-                .allowMainThreadQueries()
+//                .allowMainThreadQueries()
                 .build()
     }
 }
