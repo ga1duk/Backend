@@ -39,16 +39,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     init {
         loadPosts()
     }
-//        repository.getAll(object : PostRepository.GetAllCallback {
-//            override fun onSuccess(posts: List<Post>) {
-//                _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
-//            }
-//
-//            override fun onError(e: Exception) {
-//                _data.postValue(FeedModel(error = true))
-//            }
-//        })
-//    }
 
     fun loadPosts() = viewModelScope.launch {
         try {
@@ -69,80 +59,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             _dataState.value = FeedModelState(error = true)
         }
     }
-
-    fun likeById(id: Long) = viewModelScope.launch {
-        try {
-            repository.likeById(id)
-        } catch (e: Exception) {
-            _dataState.value = FeedModelState(error = true)
-        }
-    }
-
-    fun dislikeById(id: Long) = viewModelScope.launch {
-        try {
-            repository.dislikeById(id)
-        } catch (e: Exception) {
-            _dataState.value = FeedModelState(error = true)
-        }
-    }
-
-    fun removeById(id: Long) = viewModelScope.launch {
-        try {
-            repository.removeById(id)
-        } catch (e: Exception) {
-            _dataState.value = FeedModelState(error = true)
-        }
-    }
-
-//    fun removeById(id: Long) {
-//        // Оптимистичная модель
-//        val old = _data.value?.posts.orEmpty()
-//        val posts = old.filter { it.id != id }
-//        _data.postValue(
-//            FeedModel(posts = posts, empty = posts.isEmpty())
-//        )
-//        repository.removeById(id, object : PostRepository.DeleteCallback {
-//            override fun onSuccess() {
-//            }
-//
-//            override fun onError(e: Exception) {
-//                _data.postValue(_data.value?.copy(posts = old))
-//            }
-//        })
-//    }
-
-//        fun likeById(id: Long) {
-//        repository.likeById(id, object : PostRepository.LikeCallback {
-//            override fun onSuccess(post: Post) {
-//                val posts = _data.value?.posts.orEmpty()
-//                    .map {
-//                        if (it.id == post.id) post else it
-//                    }
-//                _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
-//            }
-//
-//            override fun onError(e: Exception) {
-//                _data.postValue(FeedModel(error = true))
-//            }
-//        })
-//    }
-//
-//    fun dislikeById(id: Long) {
-//        repository.dislikeById(id, object : PostRepository.LikeCallback {
-//            override fun onSuccess(post: Post) {
-//                val posts = _data.value?.posts.orEmpty()
-//                    .map {
-//                        if (it.id == post.id) post else it
-//                    }
-//                _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
-//            }
-//
-//            override fun onError(e: Exception) {
-//                _data.postValue(FeedModel(error = true))
-//            }
-//        })
-//    }
-//
 
     fun save() {
         edited.value?.let {
@@ -169,5 +85,29 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
         edited.value = edited.value?.copy(content = text)
+    }
+
+    fun likeById(id: Long) = viewModelScope.launch {
+        try {
+            repository.likeById(id)
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+    }
+
+    fun dislikeById(id: Long) = viewModelScope.launch {
+        try {
+            repository.dislikeById(id)
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+    }
+
+    fun removeById(id: Long) = viewModelScope.launch {
+        try {
+            repository.removeById(id)
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
     }
 }
