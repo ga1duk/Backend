@@ -6,6 +6,7 @@ import ru.netology.nmedia.database.dao.PostDao
 import ru.netology.nmedia.database.entity.PostEntity
 import ru.netology.nmedia.database.entity.toDto
 import ru.netology.nmedia.database.entity.toEntity
+import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.error.ApiError
 import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.error.UnknownError
@@ -149,21 +150,21 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 //
 
 
-//    override suspend fun save(post: Post) {
-//        try {
-//            val response = PostApi.retrofitService.save(post)
-//            if (!response.isSuccessful) {
-//                throw ApiError(response.code(), response.message())
-//            }
-//
-//            val body = response.body() ?: throw ApiError(response.code(), response.message())
-//            dao.insert(PostEntity.fromDto(body))
-//        } catch (e: IOException) {
-//            throw NetworkError
-//        } catch (e: Exception) {
-//            throw UnknownError
-//        }
-//    }
+    override suspend fun save(post: Post) {
+        try {
+            val response = PostApi.retrofitService.save(post)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            dao.insert(PostEntity.fromDto(body))
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
 
 //    override suspend fun save(post: Post, callback: PostRepository.SaveCallback) {
 //        PostApi.retrofitService.save(post).enqueue(object : Callback<Post> {
