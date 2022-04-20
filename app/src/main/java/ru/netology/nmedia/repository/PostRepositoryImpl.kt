@@ -62,6 +62,38 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
         }
     }
 
+    override suspend fun removeById(id: Long) {
+        try {
+            val response = PostApi.retrofitService.removeById(id)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+
+            dao.removeById(id)
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    //    override suspend fun removeById(id: Long, callback: PostRepository.DeleteCallback) {
+//        PostApi.retrofitService.removeById(id).enqueue(object : Callback<Unit> {
+//            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+//                if (!response.isSuccessful) {
+//                    callback.onError(RuntimeException(response.message()))
+//                } else {
+//                    callback.onSuccess()
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<Unit>, t: Throwable) {
+//                callback.onError(t as Exception)
+//            }
+//        })
+//    }
+//}
+
 
 //    override suspend fun getAll(callback: PostRepository.GetAllCallback) {
 //        PostApi.retrofitService.getAll().enqueue(object : Callback<List<Post>> {
@@ -133,12 +165,6 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 //        }
 //    }
 
-
-//    override suspend fun removeById(id: Long) {
-//        TODO("Not yet implemented")
-//    }
-
-
 //    override suspend fun save(post: Post, callback: PostRepository.SaveCallback) {
 //        PostApi.retrofitService.save(post).enqueue(object : Callback<Post> {
 //            override fun onResponse(call: Call<Post>, response: Response<Post>) {
@@ -156,20 +182,4 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 //        })
 //    }
 //
-//    override suspend fun removeById(id: Long, callback: PostRepository.DeleteCallback) {
-//        PostApi.retrofitService.removeById(id).enqueue(object : Callback<Unit> {
-//            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-//                if (!response.isSuccessful) {
-//                    callback.onError(RuntimeException(response.message()))
-//                } else {
-//                    callback.onSuccess()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<Unit>, t: Throwable) {
-//                callback.onError(t as Exception)
-//            }
-//        })
-//    }
-//}
 }
