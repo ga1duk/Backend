@@ -30,36 +30,38 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
         }
     }
 
-//    override suspend fun save(post: Post) {
-//        try {
-//            val response = PostApi.retrofitService.save(post)
-//            if (!response.isSuccessful) {
-//                throw ApiError(response.code(), response.message())
-//            }
-//
-//            val body = response.body() ?: throw ApiError(response.code(), response.message())
-//            dao.insert(PostEntity.fromDto(body))
-//        } catch (e: IOException) {
-//            throw NetworkError
-//        } catch (e: Exception) {
-//        throw UnknownError
-//    }
-//    }
+    override suspend fun likeById(id: Long) {
+        try {
+            val response = PostApi.retrofitService.likeById(id)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
 
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            dao.likeById(body.id)
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
 
+    override suspend fun dislikeById(id: Long) {
+        try {
+            val response = PostApi.retrofitService.dislikeById(id)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
 
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            dao.likeById(body.id)
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
 
-//    override suspend fun likeById(id: Long) {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override suspend fun dislikeById(id: Long) {
-//        TODO("Not yet implemented")
-//    }
-//
-//    override suspend fun removeById(id: Long) {
-//        TODO("Not yet implemented")
-//    }
 
 //    override suspend fun getAll(callback: PostRepository.GetAllCallback) {
 //        PostApi.retrofitService.getAll().enqueue(object : Callback<List<Post>> {
@@ -78,7 +80,8 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 //        })
 //    }
 
-//    override suspend fun likeById(id: Long, callback: PostRepository.LikeCallback) {
+
+    //    override suspend fun likeById(id: Long, callback: PostRepository.LikeCallback) {
 //        PostApi.retrofitService.likeById(id).enqueue(object : Callback<Post> {
 //            override fun onResponse(call: Call<Post>, response: Response<Post>) {
 //                if (!response.isSuccessful) {
@@ -112,6 +115,30 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 //        })
 //    }
 //
+
+
+//    override suspend fun save(post: Post) {
+//        try {
+//            val response = PostApi.retrofitService.save(post)
+//            if (!response.isSuccessful) {
+//                throw ApiError(response.code(), response.message())
+//            }
+//
+//            val body = response.body() ?: throw ApiError(response.code(), response.message())
+//            dao.insert(PostEntity.fromDto(body))
+//        } catch (e: IOException) {
+//            throw NetworkError
+//        } catch (e: Exception) {
+//            throw UnknownError
+//        }
+//    }
+
+
+//    override suspend fun removeById(id: Long) {
+//        TODO("Not yet implemented")
+//    }
+
+
 //    override suspend fun save(post: Post, callback: PostRepository.SaveCallback) {
 //        PostApi.retrofitService.save(post).enqueue(object : Callback<Post> {
 //            override fun onResponse(call: Call<Post>, response: Response<Post>) {
