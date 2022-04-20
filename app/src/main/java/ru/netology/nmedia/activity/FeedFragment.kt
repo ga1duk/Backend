@@ -44,9 +44,9 @@ class FeedFragment : Fragment() {
                 }
             }
 
-//            override fun onRemove(post: Post) {
-//                viewModel.removeById(post.id)
-//            }
+            override fun onRemove(post: Post) {
+                viewModel.removeById(post.id)
+            }
 
 //            override fun onShare(post: Post) {
 //                val intent = Intent().apply {

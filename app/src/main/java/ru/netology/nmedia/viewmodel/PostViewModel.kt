@@ -86,6 +86,31 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun removeById(id: Long) = viewModelScope.launch {
+        try {
+            repository.removeById(id)
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+    }
+
+//    fun removeById(id: Long) {
+//        // Оптимистичная модель
+//        val old = _data.value?.posts.orEmpty()
+//        val posts = old.filter { it.id != id }
+//        _data.postValue(
+//            FeedModel(posts = posts, empty = posts.isEmpty())
+//        )
+//        repository.removeById(id, object : PostRepository.DeleteCallback {
+//            override fun onSuccess() {
+//            }
+//
+//            override fun onError(e: Exception) {
+//                _data.postValue(_data.value?.copy(posts = old))
+//            }
+//        })
+//    }
+
 //        fun likeById(id: Long) {
 //        repository.likeById(id, object : PostRepository.LikeCallback {
 //            override fun onSuccess(post: Post) {
@@ -134,33 +159,15 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 //        }
 //    }
 
-fun edit(post: Post) {
-    edited.value = post
-}
-
-fun changeContent(content: String) {
-    val text = content.trim()
-    if (edited.value?.content == text) {
-        return
+    fun edit(post: Post) {
+        edited.value = post
     }
-    edited.value = edited.value?.copy(content = text)
-}
 
-
-//    fun removeById(id: Long) {
-//        // Оптимистичная модель
-//        val old = _data.value?.posts.orEmpty()
-//        val posts = old.filter { it.id != id }
-//        _data.postValue(
-//            FeedModel(posts = posts, empty = posts.isEmpty())
-//        )
-//        repository.removeById(id, object : PostRepository.DeleteCallback {
-//            override fun onSuccess() {
-//            }
-//
-//            override fun onError(e: Exception) {
-//                _data.postValue(_data.value?.copy(posts = old))
-//            }
-//        })
-//    }
+    fun changeContent(content: String) {
+        val text = content.trim()
+        if (edited.value?.content == text) {
+            return
+        }
+        edited.value = edited.value?.copy(content = text)
+    }
 }
