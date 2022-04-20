@@ -144,20 +144,20 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 //    }
 //
 
-//    fun save() {
-//        edited.value?.let {
-//            _postCreated.value = Unit
-//            viewModelScope.launch {
-//                try {
-//                    repository.save(it)
-//                    _dataState.value = FeedModelState()
-//                } catch (e: Exception) {
-//                    _dataState.value = FeedModelState(error = true)
-//                }
-//            }
-//            edited.value = empty
-//        }
-//    }
+    fun save() {
+        edited.value?.let {
+            _postCreated.value = Unit
+            viewModelScope.launch {
+                try {
+                    repository.save(it)
+                    _dataState.value = FeedModelState()
+                } catch (e: Exception) {
+                    _dataState.value = FeedModelState(error = true)
+                }
+            }
+            edited.value = empty
+        }
+    }
 
     fun edit(post: Post) {
         edited.value = post
