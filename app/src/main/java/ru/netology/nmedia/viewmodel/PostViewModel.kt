@@ -69,45 +69,24 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             _dataState.value = FeedModelState(error = true)
         }
     }
-//        repository.getAll(object : PostRepository.GetAllCallback {
-//            override fun onSuccess(posts: List<Post>) {
-//                _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
-//            }
-//
-//            override fun onError(e: Exception) {
-//                _data.postValue(FeedModel(error = true))
-//            }
-//        })
-//    }
 
-//    fun save() {
-//        edited.value?.let {
-//            _postCreated.value = Unit
-//            viewModelScope.launch {
-//                try {
-//                    repository.save(it)
-//                    _dataState.value = FeedModelState()
-//                } catch (e: Exception) {
-//                    _dataState.value = FeedModelState(error = true)
-//                }
-//            }
-//            edited.value = empty
-//        }
-//    }
-
-    fun edit(post: Post) {
-        edited.value = post
-    }
-
-    fun changeContent(content: String) {
-        val text = content.trim()
-        if (edited.value?.content == text) {
-            return
+    fun likeById(id: Long) = viewModelScope.launch {
+        try {
+            repository.likeById(id)
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
         }
-        edited.value = edited.value?.copy(content = text)
     }
 
-//    fun likeById(id: Long) {
+    fun dislikeById(id: Long) = viewModelScope.launch {
+        try {
+            repository.dislikeById(id)
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+    }
+
+//        fun likeById(id: Long) {
 //        repository.likeById(id, object : PostRepository.LikeCallback {
 //            override fun onSuccess(post: Post) {
 //                val posts = _data.value?.posts.orEmpty()
@@ -139,6 +118,35 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 //        })
 //    }
 //
+
+//    fun save() {
+//        edited.value?.let {
+//            _postCreated.value = Unit
+//            viewModelScope.launch {
+//                try {
+//                    repository.save(it)
+//                    _dataState.value = FeedModelState()
+//                } catch (e: Exception) {
+//                    _dataState.value = FeedModelState(error = true)
+//                }
+//            }
+//            edited.value = empty
+//        }
+//    }
+
+fun edit(post: Post) {
+    edited.value = post
+}
+
+fun changeContent(content: String) {
+    val text = content.trim()
+    if (edited.value?.content == text) {
+        return
+    }
+    edited.value = edited.value?.copy(content = text)
+}
+
+
 //    fun removeById(id: Long) {
 //        // Оптимистичная модель
 //        val old = _data.value?.posts.orEmpty()
