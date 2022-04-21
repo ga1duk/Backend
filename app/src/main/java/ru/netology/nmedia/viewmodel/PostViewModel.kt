@@ -62,10 +62,10 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun save() {
         edited.value?.let {
-            _postCreated.value = Unit
             viewModelScope.launch {
                 try {
                     repository.save(it)
+                    _postCreated.value = Unit
                     _dataState.value = FeedModelState()
                 } catch (e: Exception) {
                     _dataState.value = FeedModelState(error = true)
