@@ -1,2 +1,2 @@
-# Домашнее задание к занятию «2.4 Retrofit (CRUD)»
-## Задача Buggy Server
+# Домашнее задание к занятию «3.3 Coroutines в Android»
+## Задача remove & likes
