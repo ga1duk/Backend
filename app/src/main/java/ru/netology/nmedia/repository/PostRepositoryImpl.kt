@@ -28,9 +28,6 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            for (element in body.iterator()) {
-                element.show = true
-            }
             dao.insert(body.toEntity())
         } catch (e: IOException) {
             throw NetworkError
@@ -106,13 +103,15 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            for (element in body.iterator()) {
-                element.show = false
-            }
             dao.insert(body.toEntity())
+            dao.setShowFieldForNewPostsToFalse(id)
             emit(body.size)
         }
     }
         .catch { e -> throw AppError.from(e) }
         .flowOn(Dispatchers.Default)
+
+    override suspend fun updateShow() {
+        dao.setShowFieldForAllPostsToTrue()
+    }
 }

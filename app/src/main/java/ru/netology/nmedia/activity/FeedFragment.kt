@@ -68,6 +68,7 @@ class FeedFragment : Fragment() {
             binding.progress.isVisible = state.loading
             binding.swipeRefreshLayout.isRefreshing = state.refreshing
             binding.errorGroup.isVisible = state.error
+            binding.btnNewEntries.isVisible = state.freshPosts
             if (state.error) {
                 Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_LONG)
                     .setAction("Retry") { viewModel.loadPosts() }
@@ -96,8 +97,9 @@ class FeedFragment : Fragment() {
         }
 
         binding.btnNewEntries.setOnClickListener {
-            binding.list.smoothScrollToPosition(0)
+            viewModel.updateShow()
             binding.btnNewEntries.visibility = View.GONE
+            binding.list.smoothScrollToPosition(0)
         }
 
         with(binding.swipeRefreshLayout) {

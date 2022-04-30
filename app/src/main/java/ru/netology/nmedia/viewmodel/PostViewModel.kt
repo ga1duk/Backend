@@ -21,8 +21,7 @@ private val empty = Post(
     content = "",
     likedByMe = false,
     likes = 0,
-    published = "",
-    show = true
+    published = ""
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
@@ -58,6 +57,12 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             _dataState.value = FeedModelState(loading = true)
             repository.getAll()
             _dataState.value = FeedModelState()
+//            data.value?.posts?.firstOrNull()?.show = false
+//            if (newerPostsCount.value!! > 0) {
+//                _dataState.value = FeedModelState(freshPosts = true)
+//            } else {
+//                _dataState.value = FeedModelState(freshPosts = false)
+//            }
         } catch (e: Exception) {
             _dataState.value = FeedModelState(error = true)
         }
@@ -68,6 +73,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             _dataState.value = FeedModelState(refreshing = true)
             repository.getAll()
             _dataState.value = FeedModelState()
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+    }
+
+    fun updateShow() = viewModelScope.launch {
+        try {
+            repository.updateShow()
         } catch (e: Exception) {
             _dataState.value = FeedModelState(error = true)
         }
