@@ -31,6 +31,8 @@ class FeedFragment : Fragment() {
 
         binding.errorGroup.isVisible = false
 
+        binding.btnNew.visibility = View.GONE
+
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
@@ -79,6 +81,9 @@ class FeedFragment : Fragment() {
         }
 
         viewModel.newerPostsCount.observe(viewLifecycleOwner) { state ->
+            if (state > 0) {
+                binding.btnNew.visibility = View.VISIBLE
+            }
                 println(state)
         }
 
@@ -88,6 +93,11 @@ class FeedFragment : Fragment() {
 
         binding.fab.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+        }
+
+        binding.btnNew.setOnClickListener {
+            binding.list.smoothScrollToPosition(0)
+            binding.btnNew.visibility = View.GONE
         }
 
         with(binding.swipeRefreshLayout) {
