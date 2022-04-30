@@ -16,15 +16,15 @@ data class PostEntity(
     val likedByMe: Boolean,
     val likes: Int = 0,
     val attachment: Attachment? = null,
-    var show: Boolean
+    var show: Boolean = true
 ) {
-    fun toDto() = Post(id, author, authorAvatar, content, published, likedByMe, likes, attachment, show)
+    fun toDto() = Post(id, author, authorAvatar, content, published, likedByMe, likes, attachment)
 
     companion object {
         fun fromDto(dto: Post) =
             PostEntity(
                 dto.id, dto.author, dto.authorAvatar, dto.content, dto.published,
-                dto.likedByMe, dto.likes, dto.attachment, dto.show
+                dto.likedByMe, dto.likes, dto.attachment
             )
     }
 }
