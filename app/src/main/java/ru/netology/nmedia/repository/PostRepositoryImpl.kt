@@ -111,7 +111,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
         .catch { e -> throw AppError.from(e) }
         .flowOn(Dispatchers.Default)
 
-    override suspend fun updateShow() {
+    override suspend fun setAllPostsVisibilityToTrue() {
         dao.setShowFieldForAllPostsToTrue()
     }
 }
