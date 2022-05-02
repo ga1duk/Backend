@@ -31,7 +31,7 @@ class FeedFragment : Fragment() {
 
         binding.errorGroup.isVisible = false
 
-        binding.btnNewEntries.visibility = View.GONE
+        binding.btnNewEntries.isVisible = false
 
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
@@ -68,7 +68,6 @@ class FeedFragment : Fragment() {
             binding.progress.isVisible = state.loading
             binding.swipeRefreshLayout.isRefreshing = state.refreshing
             binding.errorGroup.isVisible = state.error
-            binding.btnNewEntries.isVisible = state.freshPosts
             if (state.error) {
                 Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_LONG)
                     .setAction("Retry") { viewModel.loadPosts() }
@@ -83,9 +82,8 @@ class FeedFragment : Fragment() {
 
         viewModel.newerPostsCount.observe(viewLifecycleOwner) { state ->
             if (state > 0) {
-                binding.btnNewEntries.visibility = View.VISIBLE
+                binding.btnNewEntries.isVisible = true
             }
-                println(state)
         }
 
         binding.retryButton.setOnClickListener {
@@ -97,8 +95,8 @@ class FeedFragment : Fragment() {
         }
 
         binding.btnNewEntries.setOnClickListener {
-            viewModel.updateShow()
-            binding.btnNewEntries.visibility = View.GONE
+            viewModel.setNewPostsVisibilityToTrue()
+            binding.btnNewEntries.isVisible = false
             binding.list.smoothScrollToPosition(0)
         }
 

@@ -16,7 +16,7 @@ data class PostEntity(
     val likedByMe: Boolean,
     val likes: Int = 0,
     val attachment: Attachment? = null,
-    var show: Boolean = true
+    var isPostVisible: Boolean = true
 ) {
     fun toDto() = Post(id, author, authorAvatar, content, published, likedByMe, likes, attachment)
 
