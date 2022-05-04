@@ -104,9 +104,14 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             dao.insert(body.toEntity())
+            dao.setShowFieldForNewPostsToFalse(id)
             emit(body.size)
         }
     }
         .catch { e -> throw AppError.from(e) }
         .flowOn(Dispatchers.Default)
+
+    override suspend fun setAllPostsVisibilityToTrue() {
+        dao.setShowFieldForAllPostsToTrue()
+    }
 }

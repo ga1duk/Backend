@@ -1,2 +1,2 @@
-# Домашнее задание к занятию «3.3 Coroutines в Android»
-## Задача remove & likes
+# Домашнее задание к занятию «3.4 Flow»
+## Задача New Posts
