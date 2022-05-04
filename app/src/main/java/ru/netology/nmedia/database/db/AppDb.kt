@@ -7,10 +7,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ru.netology.nmedia.database.dao.PostDao
 import ru.netology.nmedia.database.entity.PostEntity
-import ru.netology.nmedia.database.typeconverter.AttachmentConverter
+import ru.netology.nmedia.database.typeconverter.Converters
 
-@Database(entities = [PostEntity::class], version = 1)
-@TypeConverters(AttachmentConverter::class)
+@Database(entities = [PostEntity::class], version = 1, exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class AppDb : RoomDatabase() {
     abstract fun postDao(): PostDao
 
