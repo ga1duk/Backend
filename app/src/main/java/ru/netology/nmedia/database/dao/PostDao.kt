@@ -9,7 +9,7 @@ import ru.netology.nmedia.database.entity.PostEntity
 
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
+    @Query("SELECT * FROM PostEntity WHERE isPostVisible = 1 ORDER BY id DESC")
     fun getAll(): Flow<List<PostEntity>>
 
     @Query("SELECT COUNT(*) == 0 FROM PostEntity")
@@ -26,6 +26,12 @@ interface PostDao {
 
     suspend fun save(post: PostEntity) =
         if (post.id == 0L) insert(post) else updateContentById(post.id, post.content)
+
+    @Query("UPDATE PostEntity SET isPostVisible = 1")
+    suspend fun setShowFieldForAllPostsToTrue()
+
+    @Query("UPDATE PostEntity SET isPostVisible = 0 where id > :id")
+    suspend fun setShowFieldForNewPostsToFalse(id: Long)
 
     @Query(
         """

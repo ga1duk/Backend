@@ -29,7 +29,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository =
         PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
 
-    //    val data: LiveData<FeedModel> = repository.data.map(::FeedModel)
     val data: LiveData<FeedModel> = repository.data
         .map(::FeedModel)
         .catch { e -> e.printStackTrace() }
@@ -45,7 +44,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         get() = _postCreated
     val newerPostsCount: LiveData<Int> = data.switchMap {
         repository.getNewerPostsCount(it.posts.firstOrNull()?.id ?: 0L)
-            .asLiveData(Dispatchers.Default)
+            .catch { e -> e.printStackTrace() }
+            .asLiveData()
     }
 
     init {
@@ -67,6 +67,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             _dataState.value = FeedModelState(refreshing = true)
             repository.getAll()
             _dataState.value = FeedModelState()
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+    }
+
+    fun setNewPostsVisibilityToTrue() = viewModelScope.launch {
+        try {
+            repository.setAllPostsVisibilityToTrue()
         } catch (e: Exception) {
             _dataState.value = FeedModelState(error = true)
         }
