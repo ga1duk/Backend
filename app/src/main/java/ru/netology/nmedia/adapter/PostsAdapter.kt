@@ -17,6 +17,7 @@ interface OnInteractionListener {
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
     fun onShare(post: Post) {}
+    fun onAttachmentClick(post: Post) {}
 }
 
 class PostsAdapter(
@@ -56,11 +57,15 @@ class PostViewHolder(
                 .timeout(10_000)
                 .into(binding.avatar)
 
-            val urlImages = "${BASE_URL}/images/${post.attachment?.url}"
+            val urlImages = "${BASE_URL}/media/${post.attachment?.url}"
             Glide.with(binding.attachment)
                 .load(urlImages)
                 .timeout(10_000)
                 .into(binding.attachment)
+
+            binding.attachment.setOnClickListener {
+                onInteractionListener.onAttachmentClick(post)
+            }
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
