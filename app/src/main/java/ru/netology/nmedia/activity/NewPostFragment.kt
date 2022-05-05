@@ -19,8 +19,6 @@ import ru.netology.nmedia.util.StringArg
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class NewPostFragment : Fragment() {
-//    private val photoRequestCode = 1
-//    private val cameraRequestCode = 2
 
     companion object {
         var Bundle.textArg: String? by StringArg
