@@ -63,7 +63,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
         return when (item.itemId) {
             R.id.signin -> {
                 findNavController(R.id.nav_host_fragment)
-                    .navigate(R.id.action_feedFragment_to_signInFragment)
+                    .navigate(R.id.action_global_signInFragment)
                 true
             }
             R.id.signup -> {
