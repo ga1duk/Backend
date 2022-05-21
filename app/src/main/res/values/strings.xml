@@ -30,4 +30,6 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_out">Sign Out</string>
+    <string name="hint_type_login">Type login</string>
+    <string name="hint_type_password">Type password</string>
 </resources>
