@@ -79,7 +79,7 @@ interface PostsApiService {
         @Field("login") login: String,
         @Field("pass") pass: String,
         @Field("name") name: String
-    ) : Response<User>
+    ): Response<User>
 }
 
 object PostApi {
