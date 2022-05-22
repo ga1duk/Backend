@@ -32,4 +32,6 @@
     <string name="sign_out">Sign Out</string>
     <string name="hint_type_login">Type login</string>
     <string name="hint_type_password">Type password</string>
+    <string name="hint_type_user_name">Type user name</string>
+    <string name="hint_confirm_password">Confirm password</string>
 </resources>
