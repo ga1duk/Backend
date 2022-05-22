@@ -33,4 +33,6 @@
     <string name="sign_out">Выход</string>
     <string name="hint_type_login">Введите логин</string>
     <string name="hint_type_password">Введите пароль</string>
+    <string name="hint_type_user_name">Введите имя пользователя</string>
+    <string name="hint_confirm_password">Подтвердите пароль</string>
 </resources>
