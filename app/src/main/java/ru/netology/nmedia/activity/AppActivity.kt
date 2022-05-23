@@ -7,20 +7,27 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
-import ru.netology.nmedia.auth.AppAuth
+import ru.netology.nmedia.activity.dialog.ExitDialogFragment
 import ru.netology.nmedia.viewmodel.AuthViewModel
 
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
     private val viewModel: AuthViewModel by viewModels()
 
+    private lateinit var exitDialogFragment: ExitDialogFragment
+    private lateinit var manager: FragmentManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        exitDialogFragment = ExitDialogFragment()
+        manager = supportFragmentManager
 
         intent?.let {
             if (it.action != Intent.ACTION_SEND) {
@@ -72,7 +79,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 true
             }
             R.id.signout -> {
-                AppAuth.getInstance().removeAuth()
+                exitDialogFragment.show(manager, "myDialog")
                 true
             }
             else -> super.onOptionsItemSelected(item)
