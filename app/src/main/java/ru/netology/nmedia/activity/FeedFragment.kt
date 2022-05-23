@@ -40,10 +40,12 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                if (!post.likedByMe) {
-                    viewModel.likeById(post.id)
-                } else {
-                    viewModel.dislikeById(post.id)
+                if (viewModel.checkForUsersAuthentication()) {
+                    if (!post.likedByMe) {
+                        viewModel.likeById(post.id)
+                    } else {
+                        viewModel.dislikeById(post.id)
+                    }
                 }
             }
 
@@ -86,6 +88,15 @@ class FeedFragment : Fragment() {
             binding.emptyText.isVisible = state.empty
         }
 
+        viewModel.isUserAuthorized.observe(viewLifecycleOwner) { state ->
+            if (!state)
+                Snackbar.make(binding.root, R.string.error_sign_in, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.action_sign_in) {
+                        findNavController().navigate(R.id.action_feedFragment_to_signInFragment)
+                    }
+                    .show()
+        }
+
         viewModel.newerPostsCount.observe(viewLifecycleOwner) { state ->
             if (state > 0) {
                 binding.btnNewEntries.isVisible = true
@@ -97,7 +108,9 @@ class FeedFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            if (viewModel.checkForUsersAuthentication()) {
+                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            }
         }
 
         binding.btnNewEntries.setOnClickListener {

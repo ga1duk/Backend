@@ -34,4 +34,6 @@
     <string name="hint_type_password">Type password</string>
     <string name="hint_type_user_name">Type user name</string>
     <string name="hint_confirm_password">Confirm password</string>
+    <string name="error_sign_in">this action needs sign in to your account</string>
+    <string name="action_sign_in">Sign_in</string>
 </resources>
