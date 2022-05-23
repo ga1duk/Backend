@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.PostAttachmentFragment.Companion.stringArg
+import ru.netology.nmedia.activity.dialog.SignInDialogFragment
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
@@ -33,6 +34,8 @@ class FeedFragment : Fragment() {
         binding.errorGroup.isVisible = false
 
         binding.btnNewEntries.isVisible = false
+
+        val signInDialogFragment = SignInDialogFragment()
 
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
@@ -90,11 +93,7 @@ class FeedFragment : Fragment() {
 
         viewModel.isUserAuthorized.observe(viewLifecycleOwner) { state ->
             if (!state)
-                Snackbar.make(binding.root, R.string.error_sign_in, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.action_sign_in) {
-                        findNavController().navigate(R.id.action_feedFragment_to_signInFragment)
-                    }
-                    .show()
+            signInDialogFragment.show(requireActivity().supportFragmentManager, "myDialog")
         }
 
         viewModel.newerPostsCount.observe(viewLifecycleOwner) { state ->
