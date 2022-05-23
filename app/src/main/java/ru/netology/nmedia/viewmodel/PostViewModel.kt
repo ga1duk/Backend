@@ -65,6 +65,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             .catch { e -> e.printStackTrace() }
             .asLiveData()
     }
+    private val _isUserAuthorized = SingleLiveEvent<Boolean>()
+    val isUserAuthorized: LiveData<Boolean>
+        get() = _isUserAuthorized
 
     private val _photo = MutableLiveData(noPhoto)
     val photo: LiveData<PhotoModel>
@@ -137,7 +140,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun likeById(id: Long) = viewModelScope.launch {
         try {
-            repository.likeById(id)
+                repository.likeById(id)
         } catch (e: Exception) {
             _dataState.value = FeedModelState(error = true)
         }
@@ -145,7 +148,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun dislikeById(id: Long) = viewModelScope.launch {
         try {
-            repository.dislikeById(id)
+                repository.dislikeById(id)
         } catch (e: Exception) {
             _dataState.value = FeedModelState(error = true)
         }
@@ -161,5 +164,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun changePhoto(uri: Uri?, file: File?) {
         _photo.value = PhotoModel(uri, file)
+    }
+
+    fun checkForUsersAuthentication(): Boolean {
+        _isUserAuthorized.value = !(AppAuth.getInstance().authStateFlow.value.id == 0L
+                || AppAuth.getInstance().authStateFlow.value.token == null)
+        return _isUserAuthorized.value ?: false
     }
 }
