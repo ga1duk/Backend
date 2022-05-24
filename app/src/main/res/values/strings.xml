@@ -42,4 +42,5 @@
     <string name="dialog_negative_button_text">No</string>
     <string name="dialog_title_sign_in">This action is available for authorized person only</string>
     <string name="sign_in_message_are_you_sure">Sign in to your account?</string>
+    <string name="error_passwords_must_match">Passwords must match</string>
 </resources>

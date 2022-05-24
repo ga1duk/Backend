@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentSignUpBinding
 import ru.netology.nmedia.viewmodel.SignUpViewModel
 
@@ -22,6 +23,10 @@ class SignUpFragment : Fragment() {
         val binding = FragmentSignUpBinding.inflate(inflater, container, false)
 
         binding.btnSignUp.setOnClickListener {
+            if (binding.etConfirmPassword.text.toString() != binding.etPassword.text.toString()) {
+                binding.tfConfirmPassword.error = getString(R.string.error_passwords_must_match)
+                return@setOnClickListener
+            }
             viewModel.createUser(
                 binding.etLogin.text.toString(),
                 binding.etPassword.text.toString(),
