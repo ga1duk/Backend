@@ -6,12 +6,12 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_login"
-        style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:endIconMode="clear_text"
         android:hint="@string/hint_type_login"
-        android:layout_marginBottom="16dp"
+        android:layout_margin="@dimen/common_spacing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tf_password">
@@ -26,10 +26,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tf_password"
-        style="@style/Widget.Material3.TextInputLayout.FilledBox"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_spacing"
+        android:layout_margin="@dimen/common_spacing"
         android:hint="@string/hint_type_password"
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
