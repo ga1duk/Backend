@@ -43,4 +43,8 @@
     <string name="dialog_title_sign_in">This action is available for authorized person only</string>
     <string name="sign_in_message_are_you_sure">Sign in to your account?</string>
     <string name="error_passwords_must_match">Passwords must match</string>
+    <string name="error_empty_login_or_pass">Fields \"Login\" and \"Password\" must not be empty</string>
+    <string name="toast_text_successful_register">Successful registration</string>
+    <string name="toast_text_successful_sign_in">Successful sign in</string>
+    <string name="error_empty_text_fields">Fields must not be empty</string>
 </resources>
