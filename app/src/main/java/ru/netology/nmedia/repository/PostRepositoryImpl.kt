@@ -16,6 +16,7 @@ import ru.netology.nmedia.error.AppError
 import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.error.UnknownError
 import java.io.IOException
+import java.sql.SQLException
 
 class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
     override val data = dao.getAll()
@@ -143,34 +144,6 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
                 throw ApiError(response.code(), response.message())
             }
 
-            return response.body() ?: throw ApiError(response.code(), response.message())
-        } catch (e: IOException) {
-            throw NetworkError
-        } catch (e: Exception) {
-            throw UnknownError
-        }
-    }
-
-    override suspend fun updateUser(login: String, password: String): User {
-        try {
-            val response = PostApi.retrofitService.updateUser(login, password)
-            if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
-            }
-            return response.body() ?: throw ApiError(response.code(), response.message())
-        } catch (e: IOException) {
-            throw NetworkError
-        } catch (e: Exception) {
-            throw UnknownError
-        }
-    }
-
-    override suspend fun createUser(login: String, password: String, name: String): User {
-        try {
-            val response = PostApi.retrofitService.createUser(login, password, name)
-            if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
-            }
             return response.body() ?: throw ApiError(response.code(), response.message())
         } catch (e: IOException) {
             throw NetworkError
