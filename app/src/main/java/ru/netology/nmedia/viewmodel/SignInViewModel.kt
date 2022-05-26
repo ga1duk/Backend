@@ -3,11 +3,12 @@ package ru.netology.nmedia.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.database.db.AppDb
+import ru.netology.nmedia.error.NetworkError
+import ru.netology.nmedia.error.LoginOrPassError
 import ru.netology.nmedia.model.SignInModelState
 import ru.netology.nmedia.repository.UserRepository
 import ru.netology.nmedia.repository.UserRepositoryImpl
@@ -31,8 +32,12 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
             } else {
                 _dataState.value = SignInModelState(emptyFieldsError = true)
             }
-        } catch (e: Exception) {
+        } catch (e: LoginOrPassError) {
+            _dataState.value = SignInModelState(loginOrPassError = true)
+        } catch (e: NetworkError) {
             _dataState.value = SignInModelState(networkError = true)
+        } catch (e: Exception) {
+            _dataState.value = SignInModelState(unknownError = true)
         }
     }
 }

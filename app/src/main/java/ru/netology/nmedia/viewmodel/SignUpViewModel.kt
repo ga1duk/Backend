@@ -9,6 +9,8 @@ import kotlinx.coroutines.launch
 import ru.netology.nmedia.R
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.database.db.AppDb
+import ru.netology.nmedia.error.LoginOrPassError
+import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.model.SignInModelState
 import ru.netology.nmedia.model.SignUpModelState
 import ru.netology.nmedia.repository.PostRepository
@@ -35,8 +37,12 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
             } else {
                 _dataState.value = SignUpModelState(emptyFieldsError = true)
             }
-        } catch (e: Exception) {
+        } catch (e: LoginOrPassError) {
+            _dataState.value = SignUpModelState(loginOrPassError = true)
+        } catch (e: NetworkError) {
             _dataState.value = SignUpModelState(networkError = true)
+        } catch (e: Exception) {
+            _dataState.value = SignUpModelState(unknownError = true)
         }
     }
 }

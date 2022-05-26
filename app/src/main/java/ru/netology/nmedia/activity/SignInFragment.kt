@@ -32,7 +32,7 @@ class SignInFragment : Fragment() {
         }
 
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
-            if (state.networkError) {
+            if (state.unknownError) {
                 Snackbar.make(
                     binding.root,
                     R.string.error_loading,
@@ -43,6 +43,20 @@ class SignInFragment : Fragment() {
                 Snackbar.make(
                     binding.root,
                     R.string.error_empty_login_or_pass,
+                    Snackbar.LENGTH_LONG
+                )
+                    .show()
+            } else if (state.networkError) {
+                Snackbar.make(
+                    binding.root,
+                    R.string.error_check_network_connection,
+                    Snackbar.LENGTH_LONG
+                )
+                    .show()
+            } else if (state.loginOrPassError) {
+                Snackbar.make(
+                    binding.root,
+                    R.string.error_login_or_pass_unknown,
                     Snackbar.LENGTH_LONG
                 )
                     .show()

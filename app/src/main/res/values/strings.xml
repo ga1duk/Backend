@@ -46,5 +46,8 @@
     <string name="error_empty_login_or_pass">Fields \"Login\" and \"Password\" must not be empty</string>
     <string name="toast_text_successful_register">Successful registration</string>
     <string name="toast_text_successful_sign_in">Successful sign in</string>
-    <string name="error_empty_text_fields">Fields must not be empty</string>
+    <string name="error_empty_text_fields">All fields must be filled in</string>
+    <string name="error_check_network_connection">Check your network connection and try again</string>
+    <string name="error_login_or_pass_unknown">Make sure the username and password you entered are correct</string>
+    <string name="error_login_is_occupied">Login is occupied. Try another one</string>
 </resources>
