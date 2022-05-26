@@ -37,13 +37,31 @@ class SignUpFragment : Fragment() {
         }
 
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
-            if (state.networkError) {
-                Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_LONG)
+            if (state.unknownError) {
+                Snackbar.make(
+                    binding.root,
+                    R.string.error_loading,
+                    Snackbar.LENGTH_LONG
+                )
                     .show()
             } else if (state.emptyFieldsError) {
                 Snackbar.make(
                     binding.root,
                     R.string.error_empty_text_fields,
+                    Snackbar.LENGTH_LONG
+                )
+                    .show()
+            } else if (state.networkError) {
+                Snackbar.make(
+                    binding.root,
+                    R.string.error_check_network_connection,
+                    Snackbar.LENGTH_LONG
+                )
+                    .show()
+            } else if (state.loginOrPassError) {
+                Snackbar.make(
+                    binding.root,
+                    R.string.error_login_is_occupied,
                     Snackbar.LENGTH_LONG
                 )
                     .show()
