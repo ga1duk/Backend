@@ -33,39 +33,32 @@ class SignInFragment : Fragment() {
 
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             if (state.unknownError) {
-                Snackbar.make(
-                    binding.root,
-                    R.string.error_loading,
-                    Snackbar.LENGTH_LONG
-                )
-                    .show()
+                showSnackBar(binding, R.string.error_loading)
             } else if (state.emptyFieldsError) {
-                Snackbar.make(
-                    binding.root,
-                    R.string.error_empty_login_or_pass,
-                    Snackbar.LENGTH_LONG
-                )
-                    .show()
+                showSnackBar(binding, R.string.error_empty_login_or_pass)
             } else if (state.networkError) {
-                Snackbar.make(
-                    binding.root,
-                    R.string.error_check_network_connection,
-                    Snackbar.LENGTH_LONG
-                )
-                    .show()
+                showSnackBar(binding, R.string.error_check_network_connection)
             } else if (state.loginOrPassError) {
-                Snackbar.make(
-                    binding.root,
-                    R.string.error_login_or_pass_unknown,
-                    Snackbar.LENGTH_LONG
-                )
-                    .show()
+                showSnackBar(binding, R.string.error_login_or_pass_unknown)
             } else {
                 findNavController().navigateUp()
-                Toast.makeText(requireActivity(), R.string.toast_text_successful_sign_in, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireActivity(),
+                    R.string.toast_text_successful_sign_in,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
         return binding.root
+    }
+
+    private fun showSnackBar(binding: FragmentSignInBinding, message: Int) {
+        Snackbar.make(
+            binding.root,
+            getString(message),
+            Snackbar.LENGTH_LONG
+        )
+            .show()
     }
 }

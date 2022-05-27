@@ -30,7 +30,7 @@ class UserRepositoryImpl(private val dao: PostDao) : UserRepository {
         }
     }
 
-    override suspend fun createUser(login: String, password: String, name: String): User {
+    override suspend fun createUser(name: String, login: String, password: String): User {
         try {
             val response = PostApi.retrofitService.createUser(login, password, name)
             if (!response.isSuccessful) {
