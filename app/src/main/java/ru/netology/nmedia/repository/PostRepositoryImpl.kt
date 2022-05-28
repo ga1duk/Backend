@@ -16,7 +16,6 @@ import ru.netology.nmedia.error.AppError
 import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.error.UnknownError
 import java.io.IOException
-import java.sql.SQLException
 
 class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
     override val data = dao.getAll()

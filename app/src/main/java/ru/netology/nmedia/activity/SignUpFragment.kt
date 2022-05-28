@@ -35,7 +35,7 @@ class SignUpFragment : Fragment() {
 
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             if (state.unknownError) {
-                showSnackBar(binding,R.string.error_loading)
+                showSnackBar(binding, R.string.error_loading)
             } else if (state.emptyFieldsError) {
                 showSnackBar(binding, R.string.error_empty_text_fields)
             } else if (state.networkError) {

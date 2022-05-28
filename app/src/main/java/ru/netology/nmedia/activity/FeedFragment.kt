@@ -101,7 +101,7 @@ class FeedFragment : Fragment() {
 
         viewModel.isUserAuthorized.observe(viewLifecycleOwner) { state ->
             if (!state)
-            signInDialogFragment.show(requireActivity().supportFragmentManager, "myDialog")
+                signInDialogFragment.show(requireActivity().supportFragmentManager, "myDialog")
         }
 
         viewModel.newerPostsCount.observe(viewLifecycleOwner) { state ->

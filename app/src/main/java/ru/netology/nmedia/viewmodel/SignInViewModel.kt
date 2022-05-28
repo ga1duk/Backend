@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.database.db.AppDb
-import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.error.LoginOrPassError
+import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.model.SignInModelState
 import ru.netology.nmedia.repository.UserRepository
 import ru.netology.nmedia.repository.UserRepositoryImpl
