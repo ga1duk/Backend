@@ -22,7 +22,17 @@ data class PostEntity(
     var attachment: AttachmentEmbeddable?,
     var isPostVisible: Boolean = true
 ) {
-    fun toDto() = Post(id, authorId, author, authorAvatar, content, published, likedByMe, likes, attachment?.toDto())
+    fun toDto() = Post(
+        id,
+        authorId,
+        author,
+        authorAvatar,
+        content,
+        published,
+        likedByMe,
+        likes,
+        attachment?.toDto()
+    )
 
     companion object {
         fun fromDto(dto: Post) =
@@ -40,9 +50,9 @@ data class AttachmentEmbeddable(
     fun toDto() = Attachment(url, type)
 
     companion object {
-       fun fromDto(dto: Attachment?) = dto?.let {
-           AttachmentEmbeddable(it.url, it.type)
-       }
+        fun fromDto(dto: Attachment?) = dto?.let {
+            AttachmentEmbeddable(it.url, it.type)
+        }
     }
 }
 

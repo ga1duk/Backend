@@ -1,11 +1,10 @@
 package ru.netology.nmedia.error
 
 import java.io.IOException
-import java.lang.RuntimeException
 import java.sql.SQLException
 
 
-sealed class AppError(var code: String): RuntimeException() {
+sealed class AppError(var code: String) : RuntimeException() {
     companion object {
         fun from(e: Throwable): AppError = when (e) {
             is AppError -> e
@@ -15,8 +14,9 @@ sealed class AppError(var code: String): RuntimeException() {
         }
     }
 }
+
 class ApiError(val status: Int, code: String) : AppError(code)
 object NetworkError : AppError("error_network")
-object DbError: AppError("error_db")
+object DbError : AppError("error_db")
 object UnknownError : AppError("error_unknown")
 object LoginOrPassError : AppError("error_login_or_pass")
