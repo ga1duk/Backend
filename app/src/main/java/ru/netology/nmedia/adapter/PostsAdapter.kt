@@ -68,7 +68,6 @@ class PostViewHolder(
             }
 
             menu.visibility = if (post.ownedByMe) View.VISIBLE else View.INVISIBLE
-//            menu.visibility = if (post.authorId == AppAuth.getInstance().authStateFlow.value.id) View.VISIBLE else View.INVISIBLE
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
