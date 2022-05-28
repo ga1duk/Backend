@@ -44,7 +44,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             repository.data
                 .map { posts ->
                     FeedModel(
-                        posts.map { it.copy(ownedByMe = it.id == myId) }
+                        posts.map { it.copy(ownedByMe = it.authorId == myId) },
+                        posts.isEmpty()
                     )
                 }
 
@@ -64,6 +65,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             .catch { e -> e.printStackTrace() }
             .asLiveData()
     }
+    private val _isUserAuthorized = SingleLiveEvent<Boolean>()
+    val isUserAuthorized: LiveData<Boolean>
+        get() = _isUserAuthorized
 
     private val _photo = MutableLiveData(noPhoto)
     val photo: LiveData<PhotoModel>
@@ -160,5 +164,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun changePhoto(uri: Uri?, file: File?) {
         _photo.value = PhotoModel(uri, file)
+    }
+
+    fun checkForUsersAuthentication(): Boolean {
+        _isUserAuthorized.value = !(AppAuth.getInstance().authStateFlow.value.id == 0L
+                || AppAuth.getInstance().authStateFlow.value.token == null)
+        return _isUserAuthorized.value ?: false
     }
 }

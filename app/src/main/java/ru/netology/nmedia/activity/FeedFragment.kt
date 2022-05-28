@@ -12,7 +12,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
+import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.PostAttachmentFragment.Companion.stringArg
+import ru.netology.nmedia.activity.dialog.SignInDialogFragment
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
@@ -34,16 +36,27 @@ class FeedFragment : Fragment() {
 
         binding.btnNewEntries.isVisible = false
 
+        val signInDialogFragment = SignInDialogFragment()
+
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
+                val text = post.content
+                findNavController().navigate(
+                    R.id.action_feedFragment_to_newPostFragment,
+                    Bundle().apply {
+                        textArg = text
+                    }
+                )
                 viewModel.edit(post)
             }
 
             override fun onLike(post: Post) {
-                if (!post.likedByMe) {
-                    viewModel.likeById(post.id)
-                } else {
-                    viewModel.dislikeById(post.id)
+                if (viewModel.checkForUsersAuthentication()) {
+                    if (!post.likedByMe) {
+                        viewModel.likeById(post.id)
+                    } else {
+                        viewModel.dislikeById(post.id)
+                    }
                 }
             }
 
@@ -86,6 +99,11 @@ class FeedFragment : Fragment() {
             binding.emptyText.isVisible = state.empty
         }
 
+        viewModel.isUserAuthorized.observe(viewLifecycleOwner) { state ->
+            if (!state)
+                signInDialogFragment.show(requireActivity().supportFragmentManager, "myDialog")
+        }
+
         viewModel.newerPostsCount.observe(viewLifecycleOwner) { state ->
             if (state > 0) {
                 binding.btnNewEntries.isVisible = true
@@ -97,7 +115,9 @@ class FeedFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            if (viewModel.checkForUsersAuthentication()) {
+                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            }
         }
 
         binding.btnNewEntries.setOnClickListener {

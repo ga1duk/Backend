@@ -30,4 +30,24 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_out">Sign Out</string>
+    <string name="hint_type_login">Type login</string>
+    <string name="hint_type_password">Type password</string>
+    <string name="hint_type_user_name">Type user name</string>
+    <string name="hint_confirm_password">Confirm password</string>
+    <string name="error_sign_in">this action needs sign in to your account</string>
+    <string name="action_sign_in">Sign_in</string>
+    <string name="exit_message_are_you_sure">Are you sure you want to logout?</string>
+    <string name="dialog_title_exit">Exit</string>
+    <string name="dialog_positive_button_text">Yes</string>
+    <string name="dialog_negative_button_text">No</string>
+    <string name="dialog_title_sign_in">This action is available for authorized person only</string>
+    <string name="sign_in_message_are_you_sure">Sign in to your account?</string>
+    <string name="error_passwords_must_match">Passwords must match</string>
+    <string name="error_empty_login_or_pass">Fields \"Login\" and \"Password\" must not be empty</string>
+    <string name="toast_text_successful_register">Successful registration</string>
+    <string name="toast_text_successful_sign_in">Successful sign in</string>
+    <string name="error_empty_text_fields">All fields must be filled in</string>
+    <string name="error_check_network_connection">Check your network connection and try again</string>
+    <string name="error_login_or_pass_unknown">Make sure the username and password you entered are correct</string>
+    <string name="error_login_is_occupied">Login is occupied. Try another one</string>
 </resources>
