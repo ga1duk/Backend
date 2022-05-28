@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
+import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.PostAttachmentFragment.Companion.stringArg
 import ru.netology.nmedia.activity.dialog.SignInDialogFragment
 import ru.netology.nmedia.adapter.OnInteractionListener
@@ -39,6 +40,13 @@ class FeedFragment : Fragment() {
 
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
+                val text = post.content
+                findNavController().navigate(
+                    R.id.action_feedFragment_to_newPostFragment,
+                    Bundle().apply {
+                        textArg = text
+                    }
+                )
                 viewModel.edit(post)
             }
 
@@ -93,7 +101,7 @@ class FeedFragment : Fragment() {
 
         viewModel.isUserAuthorized.observe(viewLifecycleOwner) { state ->
             if (!state)
-            signInDialogFragment.show(requireActivity().supportFragmentManager, "myDialog")
+                signInDialogFragment.show(requireActivity().supportFragmentManager, "myDialog")
         }
 
         viewModel.newerPostsCount.observe(viewLifecycleOwner) { state ->

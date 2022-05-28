@@ -43,4 +43,12 @@
     <string name="dialog_negative_button_text">Нет</string>
     <string name="dialog_title_sign_in">Данное действие доступно только для авторизованных пользователей</string>
     <string name="sign_in_message_are_you_sure">Войти в свой аккаунт?</string>
+    <string name="error_passwords_must_match">Пароли должны совпадать</string>
+    <string name="error_empty_login_or_pass">Поля \"Логин\" и \"Пароль\" не должны быть пустыми</string>
+    <string name="toast_text_successful_register">Успешная регистрация</string>
+    <string name="toast_text_successful_sign_in">Успешный вход</string>
+    <string name="error_empty_text_fields">Все поля должны быть заполнены</string>
+    <string name="error_check_network_connection">Проверьте ваше интернет-соединение и попробуйте заново</string>
+    <string name="error_login_or_pass_unknown">Проверьте правильность введённого логина и пароля</string>
+    <string name="error_login_is_occupied">Логин занят. Попробуйте другой</string>
 </resources>
