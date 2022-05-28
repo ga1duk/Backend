@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
-import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
 
@@ -69,7 +68,6 @@ class PostViewHolder(
             }
 
             menu.visibility = if (post.ownedByMe) View.VISIBLE else View.INVISIBLE
-//            menu.visibility = if (post.authorId == AppAuth.getInstance().authStateFlow.value.id) View.VISIBLE else View.INVISIBLE
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
