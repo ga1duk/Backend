@@ -31,4 +31,24 @@
     <string name="sign_in">Вход</string>
     <string name="sign_up">Регистрация</string>
     <string name="sign_out">Выход</string>
+    <string name="hint_type_login">Введите логин</string>
+    <string name="hint_type_password">Введите пароль</string>
+    <string name="hint_type_user_name">Введите имя пользователя</string>
+    <string name="hint_confirm_password">Подтвердите пароль</string>
+    <string name="error_sign_in">Данное действие требует входа в учётную запись</string>
+    <string name="action_sign_in">Войти</string>
+    <string name="exit_message_are_you_sure">Вы действительно хотите выйти из учётной записи?</string>
+    <string name="dialog_title_exit">Выход</string>
+    <string name="dialog_positive_button_text">Да</string>
+    <string name="dialog_negative_button_text">Нет</string>
+    <string name="dialog_title_sign_in">Данное действие доступно только для авторизованных пользователей</string>
+    <string name="sign_in_message_are_you_sure">Войти в свой аккаунт?</string>
+    <string name="error_passwords_must_match">Пароли должны совпадать</string>
+    <string name="error_empty_login_or_pass">Поля \"Логин\" и \"Пароль\" не должны быть пустыми</string>
+    <string name="toast_text_successful_register">Успешная регистрация</string>
+    <string name="toast_text_successful_sign_in">Успешный вход</string>
+    <string name="error_empty_text_fields">Все поля должны быть заполнены</string>
+    <string name="error_check_network_connection">Проверьте ваше интернет-соединение и попробуйте заново</string>
+    <string name="error_login_or_pass_unknown">Проверьте правильность введённого логина и пароля</string>
+    <string name="error_login_is_occupied">Логин занят. Попробуйте другой</string>
 </resources>

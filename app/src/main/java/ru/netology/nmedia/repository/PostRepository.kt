@@ -12,8 +12,8 @@ interface PostRepository {
     suspend fun likeById(id: Long)
     suspend fun dislikeById(id: Long)
     suspend fun removeById(id: Long)
-    fun getNewerPostsCount(id: Long) : Flow<Int>
+    fun getNewerPostsCount(id: Long): Flow<Int>
     suspend fun setAllPostsVisibilityToTrue()
     suspend fun saveWithAttachment(post: Post, upload: MediaUpload)
-    suspend fun upload(upload: MediaUpload) : Media
+    suspend fun upload(upload: MediaUpload): Media
 }
