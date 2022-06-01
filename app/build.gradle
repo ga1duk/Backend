@@ -34,11 +34,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders.usesCleartextTraffic = false
-            buildConfigField "String", "BASE_URL", '"http://192.168.1.103:9999"'
+            buildConfigField "String", "BASE_URL", '"http://192.168.1.101:9999"'
         }
         debug {
             manifestPlaceholders.usesCleartextTraffic = true
-            buildConfigField "String", "BASE_URL", '"http://192.168.1.103:9999"'
+            buildConfigField "String", "BASE_URL", '"http://192.168.1.101:9999"'
         }
     }
 }
@@ -100,5 +100,6 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$loggingokhttp_version"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version"
     implementation "com.github.dhaval2404:imagepicker:$imagepicker_version"
 }

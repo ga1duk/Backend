@@ -44,7 +44,7 @@ class NewPostFragment : Fragment() {
             R.id.save -> {
                 fragmentBinding?.let {
                     viewModel.changeContent(it.edit.text.toString())
-                    viewModel.save()
+                    viewModel.savePost()
                     AndroidUtils.hideKeyboard(requireView())
                 }
                 true

@@ -105,13 +105,13 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun save() {
+    fun savePost() {
         edited.value?.let {
             _postCreated.value = Unit
             viewModelScope.launch {
                 try {
                     when (_photo.value) {
-                        noPhoto -> repository.save(it)
+                        noPhoto -> repository.savePost(it)
                         else -> _photo.value?.file?.let { file ->
                             repository.saveWithAttachment(it, MediaUpload(file))
                         }
