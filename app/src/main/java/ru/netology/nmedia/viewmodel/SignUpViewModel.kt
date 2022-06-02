@@ -1,23 +1,23 @@
 package ru.netology.nmedia.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
-import ru.netology.nmedia.database.db.AppDb
 import ru.netology.nmedia.error.LoginOrPassError
 import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.model.SignUpModelState
 import ru.netology.nmedia.repository.UserRepository
-import ru.netology.nmedia.repository.UserRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
+import javax.inject.Inject
 
-class SignUpViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository: UserRepository =
-        UserRepositoryImpl(AppDb.getInstance(context = application).postDao())
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
+    private val userRepository: UserRepository,
+    private val appAuth: AppAuth
+) : ViewModel() {
 
     private val _dataState = SingleLiveEvent<SignUpModelState>()
     val dataState: LiveData<SignUpModelState>
@@ -30,8 +30,8 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
                     if (passwordConfirmation != password) {
                         _dataState.value = SignUpModelState(passwordsNotMatchError = true)
                     } else {
-                        val user = repository.createUser(login, password, name)
-                        AppAuth.getInstance().setAuth(user.id, user.token)
+                        val user = userRepository.createUser(login, password, name)
+                        appAuth.setAuth(user.id, user.token)
                         _dataState.value = SignUpModelState()
                     }
                 } else {

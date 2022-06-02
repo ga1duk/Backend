@@ -12,14 +12,20 @@ import androidx.navigation.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.dialog.ExitDialogFragment
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.viewmodel.AuthViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
     private val viewModel: AuthViewModel by viewModels()
+
+    @Inject
+    lateinit var appAuth: AppAuth
 
     private lateinit var exitDialogFragment: ExitDialogFragment
     private lateinit var manager: FragmentManager
@@ -82,7 +88,8 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
             R.id.signout -> {
                 when (findNavController(R.id.nav_host_fragment).currentDestination?.id) {
                     R.id.newPostFragment -> exitDialogFragment.show(manager, "myDialog")
-                    else -> AppAuth.getInstance().removeAuth()
+                    else ->
+                        appAuth.removeAuth()
                 }
                 true
             }

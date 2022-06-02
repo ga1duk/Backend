@@ -1,6 +1,6 @@
 package ru.netology.nmedia.repository
 
-import ru.netology.nmedia.api.Api
+import ru.netology.nmedia.api.ApiService
 import ru.netology.nmedia.database.dao.PostDao
 import ru.netology.nmedia.dto.User
 import ru.netology.nmedia.error.ApiError
@@ -8,12 +8,15 @@ import ru.netology.nmedia.error.LoginOrPassError
 import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.error.UnknownError
 import java.io.IOException
+import javax.inject.Inject
 
-class UserRepositoryImpl(private val dao: PostDao) : UserRepository {
-
+class UserRepositoryImpl @Inject constructor(
+    private val dao: PostDao,
+    private val apiService: ApiService
+    ) : UserRepository {
     override suspend fun updateUser(login: String, password: String): User {
         try {
-            val response = Api.retrofitService.updateUser(login, password)
+            val response = apiService.updateUser(login, password)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
@@ -32,7 +35,7 @@ class UserRepositoryImpl(private val dao: PostDao) : UserRepository {
 
     override suspend fun createUser(name: String, login: String, password: String): User {
         try {
-            val response = Api.retrofitService.createUser(login, password, name)
+            val response = apiService.createUser(login, password, name)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
