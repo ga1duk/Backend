@@ -1,10 +1,11 @@
-package ru.netology.nmedia.repository
+package ru.netology.nmedia.di
 
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import ru.netology.nmedia.repository.UserRepository
+import ru.netology.nmedia.repository.UserRepositoryImpl
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

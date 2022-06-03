@@ -1,4 +1,4 @@
-package ru.netology.nmedia.api
+package ru.netology.nmedia.di
 
 import dagger.Module
 import dagger.Provides
@@ -11,6 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import ru.netology.nmedia.BuildConfig
+import ru.netology.nmedia.api.ApiService
 import ru.netology.nmedia.repository.TokenRepository
 import javax.inject.Singleton
 
