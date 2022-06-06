@@ -13,5 +13,5 @@ class FirebaseMessagingModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseMessaging() = FirebaseMessaging.getInstance()
+    fun provideFirebaseMessaging(): FirebaseMessaging = FirebaseMessaging.getInstance()
 }
