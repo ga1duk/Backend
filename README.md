@@ -1,2 +1,2 @@
 # Домашнее задание к занятию «1.1 Dependency Injection»
-## Задача №1 Dagger Hilt
+## Задача №2 Singletons

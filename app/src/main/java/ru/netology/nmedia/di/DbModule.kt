@@ -1,4 +1,4 @@
-package ru.netology.nmedia.database.db
+package ru.netology.nmedia.di
 
 import android.content.Context
 import androidx.room.Room
@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.netology.nmedia.database.dao.PostDao
+import ru.netology.nmedia.database.db.AppDb
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
