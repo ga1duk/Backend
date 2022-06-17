@@ -109,7 +109,6 @@ class PostViewModel @Inject constructor(
 
     fun savePost() {
         edited.value?.let {
-            _postCreated.value = Unit
             viewModelScope.launch {
                 try {
                     when (_photo.value) {
@@ -119,6 +118,7 @@ class PostViewModel @Inject constructor(
                         }
                     }
                     _dataState.value = FeedModelState()
+                    _postCreated.value = Unit
                 } catch (e: Exception) {
                     _dataState.value = FeedModelState(error = true)
                 }

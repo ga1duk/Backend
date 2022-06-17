@@ -1,5 +1,7 @@
 package ru.netology.nmedia.adapter
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +31,22 @@ class PostsAdapter(
         return PostViewHolder(binding, onInteractionListener)
     }
 
+    override fun onBindViewHolder(
+        holder: PostViewHolder,
+        position: Int,
+        payloads: List<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position)
+        } else {
+            payloads.forEach {
+                if (it is Payload) {
+                    holder.bind(it)
+                }
+            }
+        }
+    }
+
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = getItem(position)
         holder.bind(post)
@@ -41,6 +59,27 @@ class PostViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val BASE_URL = BuildConfig.BASE_URL
+
+    fun bind(payload: Payload) {
+        payload.likedByMe?.also { likedByMe ->
+            binding.like.isChecked = likedByMe
+            if (likedByMe) {
+                val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.0F, 1.2F, 1.0F)
+                val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.0F, 1.2F, 1.0F)
+                ObjectAnimator.ofPropertyValuesHolder(binding.like, scaleX, scaleY).apply {
+                    repeatCount = 1
+                }
+            } else {
+                ObjectAnimator.ofFloat(binding.like, View.ROTATION, 0F, 360F)
+            }.start()
+        }
+        payload.content?.also {
+            binding.content.text = it
+        }
+        payload.likes?.also {
+            binding.like.text = it.toString()
+        }
+    }
 
     fun bind(post: Post) {
         binding.apply {
@@ -109,4 +148,17 @@ class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem == newItem
     }
+
+    override fun getChangePayload(oldItem: Post, newItem: Post): Any =
+        Payload(
+            likedByMe = newItem.likedByMe.takeIf { it != oldItem.likedByMe },
+            content = newItem.content.takeIf { it != oldItem.content },
+            likes = newItem.likes.takeIf { it != oldItem.likes }
+        )
 }
+
+data class Payload(
+    val likedByMe: Boolean? = null,
+    val content: String? = null,
+    val likes: Int? = null
+)
