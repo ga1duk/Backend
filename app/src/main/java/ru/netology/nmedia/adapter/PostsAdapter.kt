@@ -28,7 +28,7 @@ class PostsAdapter(
 ) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(binding, onInteractionListener)
+        return PostViewHolder(binding, onInteractionListener, ::getItem)
     }
 
     override fun onBindViewHolder(
@@ -56,6 +56,7 @@ class PostsAdapter(
 class PostViewHolder(
     private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener,
+    private val getPost : (position: Int) -> Post
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val BASE_URL = BuildConfig.BASE_URL
@@ -119,7 +120,7 @@ class PostViewHolder(
                                 true
                             }
                             R.id.edit -> {
-                                onInteractionListener.onEdit(post)
+                                onInteractionListener.onEdit(getPost(bindingAdapterPosition))
                                 true
                             }
 
