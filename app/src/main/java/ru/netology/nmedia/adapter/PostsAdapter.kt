@@ -56,7 +56,7 @@ class PostsAdapter(
 class PostViewHolder(
     private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener,
-    private val getPost : (position: Int) -> Post
+    private val getPost: (position: Int) -> Post
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val BASE_URL = BuildConfig.BASE_URL
@@ -97,11 +97,13 @@ class PostViewHolder(
                 .timeout(10_000)
                 .into(binding.avatar)
 
-            val urlImages = "${BASE_URL}/media/${post.attachment?.url}"
-            Glide.with(binding.attachment)
-                .load(urlImages)
-                .timeout(10_000)
-                .into(binding.attachment)
+            if (post.attachment?.url != null) {
+                val urlImages = "${BASE_URL}/media/${post.attachment.url}"
+                Glide.with(binding.attachment)
+                    .load(urlImages)
+                    .timeout(10_000)
+                    .into(binding.attachment)
+            }
 
             binding.attachment.setOnClickListener {
                 onInteractionListener.onAttachmentClick(post)
