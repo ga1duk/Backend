@@ -23,10 +23,15 @@ import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.repository.UserIdRepository
 import ru.netology.nmedia.viewmodel.PostViewModel
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FeedFragment : Fragment() {
+
+    @Inject
+    lateinit var prefs: UserIdRepository
 
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
@@ -107,7 +112,10 @@ class FeedFragment : Fragment() {
 
         lifecycleScope.launchWhenCreated {
             viewModel.authState.collectLatest {
-                adapter.refresh()
+                if (it.id != prefs.userId) {
+                    adapter.refresh()
+                    prefs.userId = it.id
+                }
             }
         }
 

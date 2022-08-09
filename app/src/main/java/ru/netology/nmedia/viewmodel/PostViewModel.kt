@@ -9,9 +9,11 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.auth.AuthState
@@ -23,6 +25,7 @@ import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.util.SingleLiveEvent
 import java.io.File
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 private val empty = Post(
     id = 0,
@@ -44,27 +47,11 @@ class PostViewModel @Inject constructor(
     private val appAuth: AppAuth
 ) : ViewModel() {
 
-//    val data: LiveData<FeedModel> = appAuth
-//        .authStateFlow
-//        .flatMapLatest { (myId, _) ->
-//            repository.data
-//                .map { posts ->
-//                    FeedModel(
-//                        posts.map { it.copy(ownedByMe = it.authorId == myId) },
-//                        posts.isEmpty()
-//                    )
-//                }
-//
-//        }.catch { e -> e.printStackTrace() }
-//        .asLiveData(Dispatchers.Default)
-
     private val cached = repository
         .data
         .cachedIn(viewModelScope)
 
     val data: Flow<PagingData<Post>> = cached
-//.map { posts ->
-//                posts.map { it.copy(ownedByMe = it.authorId == myId) }
 
     val authState: StateFlow<AuthState> = appAuth.authStateFlow
 
