@@ -1,2 +1,2 @@
-# Домашнее задание к занятию «1.1 Dependency Injection»
-## Задача №2 Singletons
+# Домашнее задание к занятию «1.2 Architecture Components (часть 1)»
+## Задача Refresh on Login/Logout
