@@ -106,6 +106,12 @@ class FeedFragment : Fragment() {
         }
 
         lifecycleScope.launchWhenCreated {
+            viewModel.authState.collectLatest {
+                adapter.refresh()
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
             adapter.loadStateFlow.collectLatest { state ->
                 binding.swipeRefreshLayout.isRefreshing =
                     state.append is LoadState.Loading ||

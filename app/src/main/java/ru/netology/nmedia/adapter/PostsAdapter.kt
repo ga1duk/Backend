@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
+import kotlin.reflect.KFunction1
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -29,7 +29,7 @@ class PostsAdapter(
 ) : PagingDataAdapter<Post, PostViewHolder>(PostDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PostViewHolder(binding, onInteractionListener, /*::getItem*/)
+        return PostViewHolder(binding, onInteractionListener, ::getItem)
     }
 
     override fun onBindViewHolder(
@@ -57,7 +57,7 @@ class PostsAdapter(
 class PostViewHolder(
     private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener,
-    /*private val getPost: (position: Int) -> Post*/
+    private val getPost: KFunction1<Int, Post?>
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val BASE_URL = BuildConfig.BASE_URL
@@ -122,10 +122,14 @@ class PostViewHolder(
                                 onInteractionListener.onRemove(post)
                                 true
                             }
-                            /*R.id.edit -> {
-                                onInteractionListener.onEdit(getPost(bindingAdapterPosition))
+                            R.id.edit -> {
+                                getPost(bindingAdapterPosition)?.let { post ->
+                                    onInteractionListener.onEdit(
+                                        post
+                                    )
+                                }
                                 true
-                            }*/
+                            }
 
                             else -> false
                         }
