@@ -8,10 +8,13 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.activity.PostAttachmentFragment.Companion.stringArg
@@ -20,10 +23,15 @@ import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.repository.UserIdRepository
 import ru.netology.nmedia.viewmodel.PostViewModel
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FeedFragment : Fragment() {
+
+    @Inject
+    lateinit var prefs: UserIdRepository
 
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
@@ -91,14 +99,33 @@ class FeedFragment : Fragment() {
             binding.errorGroup.isVisible = state.error
             if (state.error) {
                 Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_LONG)
-                    .setAction("Retry") { viewModel.loadPosts() }
+                    .setAction("Retry") { adapter.retry() }
                     .show()
             }
         }
 
-        viewModel.data.observe(viewLifecycleOwner) { state ->
-            adapter.submitList(state.posts)
-            binding.emptyText.isVisible = state.empty
+        lifecycleScope.launchWhenCreated {
+            viewModel.data.collectLatest {
+                adapter.submitData(it)
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.authState.collectLatest {
+                if (it.id != prefs.userId) {
+                    adapter.refresh()
+                    prefs.userId = it.id
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest { state ->
+                binding.swipeRefreshLayout.isRefreshing =
+                    state.append is LoadState.Loading ||
+                            state.refresh is LoadState.Loading ||
+                            state.prepend is LoadState.Loading
+            }
         }
 
         viewModel.isUserAuthorized.observe(viewLifecycleOwner) { state ->
@@ -106,14 +133,14 @@ class FeedFragment : Fragment() {
                 signInDialogFragment.show(requireActivity().supportFragmentManager, "myDialog")
         }
 
-        viewModel.newerPostsCount.observe(viewLifecycleOwner) { state ->
-            if (state > 0) {
-                binding.btnNewEntries.isVisible = true
-            }
-        }
+//        viewModel.newerPostsCount.observe(viewLifecycleOwner) { state ->
+//            if (state > 0) {
+//                binding.btnNewEntries.isVisible = true
+//            }
+//        }
 
         binding.retryButton.setOnClickListener {
-            viewModel.loadPosts()
+            adapter.retry()
         }
 
         binding.fab.setOnClickListener {
@@ -130,7 +157,7 @@ class FeedFragment : Fragment() {
 
         with(binding.swipeRefreshLayout) {
             setOnRefreshListener {
-                viewModel.refreshPosts()
+                adapter.refresh()
             }
             setColorSchemeResources(
                 R.color.colorAccent

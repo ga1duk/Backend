@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
+import kotlin.reflect.KFunction1
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -25,7 +26,7 @@ interface OnInteractionListener {
 
 class PostsAdapter(
     private val onInteractionListener: OnInteractionListener,
-) : ListAdapter<Post, PostViewHolder>(PostDiffCallback()) {
+) : PagingDataAdapter<Post, PostViewHolder>(PostDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PostViewHolder(binding, onInteractionListener, ::getItem)
@@ -48,7 +49,7 @@ class PostsAdapter(
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val post = getItem(position)
+        val post = getItem(position) ?: return
         holder.bind(post)
     }
 }
@@ -56,7 +57,7 @@ class PostsAdapter(
 class PostViewHolder(
     private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener,
-    private val getPost : (position: Int) -> Post
+    private val getPost: KFunction1<Int, Post?>
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val BASE_URL = BuildConfig.BASE_URL
@@ -97,11 +98,13 @@ class PostViewHolder(
                 .timeout(10_000)
                 .into(binding.avatar)
 
-            val urlImages = "${BASE_URL}/media/${post.attachment?.url}"
-            Glide.with(binding.attachment)
-                .load(urlImages)
-                .timeout(10_000)
-                .into(binding.attachment)
+            if (post.attachment?.url != null) {
+                val urlImages = "${BASE_URL}/media/${post.attachment.url}"
+                Glide.with(binding.attachment)
+                    .load(urlImages)
+                    .timeout(10_000)
+                    .into(binding.attachment)
+            }
 
             binding.attachment.setOnClickListener {
                 onInteractionListener.onAttachmentClick(post)
@@ -120,7 +123,11 @@ class PostViewHolder(
                                 true
                             }
                             R.id.edit -> {
-                                onInteractionListener.onEdit(getPost(bindingAdapterPosition))
+                                getPost(bindingAdapterPosition)?.let { post ->
+                                    onInteractionListener.onEdit(
+                                        post
+                                    )
+                                }
                                 true
                             }
 
