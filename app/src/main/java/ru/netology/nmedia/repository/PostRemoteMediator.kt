@@ -30,16 +30,7 @@ class PostRemoteMediator @Inject constructor(
         try {
             val response = when (loadType) {
                 LoadType.REFRESH -> apiService.getLatest(state.config.initialLoadSize)
-                LoadType.PREPEND -> {
-                    val firstId =
-                        postRemoteKeyDao.max() ?: return MediatorResult.Success(false)
-                    apiService.getAfter(firstId, state.config.pageSize)
-                }
-                /*return LoadResult.Page(
-                emptyList(),
-                params.key,
-                null
-            )*/
+                LoadType.PREPEND -> return MediatorResult.Success(true)
                 LoadType.APPEND -> {
                     val lastId = postRemoteKeyDao.min() ?: return MediatorResult.Success(false)
                     apiService.getBefore(lastId, state.config.pageSize)
@@ -58,27 +49,15 @@ class PostRemoteMediator @Inject constructor(
             appDb.withTransaction {
                 when (loadType) {
                     LoadType.REFRESH -> {
-                        postDao.removeAll()
-                        postRemoteKeyDao.insert(
-                            listOf(
-                                PostRemoteKeyEntity(
-                                    PostRemoteKeyEntity.KeyType.AFTER,
-                                    body.first().id
-                                ),
-                                PostRemoteKeyEntity(
-                                    PostRemoteKeyEntity.KeyType.BEFORE,
-                                    body.last().id
-                                )
-                            )
-                        )
-                    }
-                    LoadType.PREPEND -> {
                         postRemoteKeyDao.insert(
                             PostRemoteKeyEntity(
                                 PostRemoteKeyEntity.KeyType.AFTER,
                                 body.first().id
                             )
                         )
+                    }
+                    LoadType.PREPEND -> {
+                        return@withTransaction
                     }
                     LoadType.APPEND -> {
                         postRemoteKeyDao.insert(
