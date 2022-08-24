@@ -1,18 +1,15 @@
 package ru.netology.nmedia.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
+import androidx.paging.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import ru.netology.nmedia.api.ApiService
 import ru.netology.nmedia.database.dao.PostDao
+import ru.netology.nmedia.database.dao.PostRemoteKeyDao
+import ru.netology.nmedia.database.db.AppDb
 import ru.netology.nmedia.database.entity.PostEntity
 import ru.netology.nmedia.database.entity.toEntity
 import ru.netology.nmedia.dto.*
@@ -22,16 +19,25 @@ import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.error.UnknownError
 import java.io.IOException
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class PostRepositoryImpl @Inject constructor(
-    private val dao: PostDao,
-    private val apiService: ApiService
+    appDb: AppDb,
+    private val apiService: ApiService,
+    private val postDao: PostDao,
+    postRemoteKeyDao: PostRemoteKeyDao
 ) : PostRepository {
 
+    @OptIn(ExperimentalPagingApi::class)
     override val data: Flow<PagingData<Post>> = Pager(
-        PagingConfig(pageSize = 10, enablePlaceholders = false),
-        pagingSourceFactory = { PostPagingSource(apiService) }
+        PagingConfig(pageSize = 25, enablePlaceholders = false),
+        pagingSourceFactory = postDao::pagingSource,
+        remoteMediator = PostRemoteMediator(apiService, postDao, postRemoteKeyDao, appDb)
     ).flow
+        .map { pagingData ->
+            pagingData.map(PostEntity::toDto)
+        }
         .flowOn(Dispatchers.Default)
 
     override suspend fun savePost(post: Post) {
@@ -42,7 +48,7 @@ class PostRepositoryImpl @Inject constructor(
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(PostEntity.fromDto(body))
+            postDao.insert(PostEntity.fromDto(body))
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
@@ -52,7 +58,7 @@ class PostRepositoryImpl @Inject constructor(
 
     override suspend fun likeById(id: Long) {
         try {
-            dao.likeById(id)
+            postDao.likeById(id)
             val response = apiService.likeById(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
@@ -66,7 +72,7 @@ class PostRepositoryImpl @Inject constructor(
 
     override suspend fun dislikeById(id: Long) {
         try {
-            dao.likeById(id)
+            postDao.likeById(id)
             val response = apiService.dislikeById(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
@@ -80,7 +86,7 @@ class PostRepositoryImpl @Inject constructor(
 
     override suspend fun removeById(id: Long) {
         try {
-            dao.removeById(id)
+            postDao.removeById(id)
             val response = apiService.removeById(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
@@ -101,8 +107,8 @@ class PostRepositoryImpl @Inject constructor(
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(body.toEntity())
-            dao.setShowFieldForNewPostsToFalse(id)
+            postDao.insert(body.toEntity())
+            postDao.setShowFieldForNewPostsToFalse(id)
             emit(body.size)
         }
     }
@@ -110,7 +116,7 @@ class PostRepositoryImpl @Inject constructor(
         .flowOn(Dispatchers.Default)
 
     override suspend fun setAllPostsVisibilityToTrue() {
-        dao.setShowFieldForAllPostsToTrue()
+        postDao.setShowFieldForAllPostsToTrue()
     }
 
     override suspend fun saveWithAttachment(post: Post, upload: MediaUpload) {
