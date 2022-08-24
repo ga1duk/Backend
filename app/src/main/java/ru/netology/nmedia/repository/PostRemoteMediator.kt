@@ -29,7 +29,10 @@ class PostRemoteMediator @Inject constructor(
     ): MediatorResult {
         try {
             val response = when (loadType) {
-                LoadType.REFRESH -> apiService.getLatest(state.config.initialLoadSize)
+                LoadType.REFRESH ->
+                    postRemoteKeyDao.max()?.let {
+                        apiService.getAfter(it, state.config.pageSize)
+                    } ?: apiService.getLatest(state.config.initialLoadSize)
                 LoadType.PREPEND -> return MediatorResult.Success(true)
                 LoadType.APPEND -> {
                     val lastId = postRemoteKeyDao.min() ?: return MediatorResult.Success(false)
@@ -49,12 +52,27 @@ class PostRemoteMediator @Inject constructor(
             appDb.withTransaction {
                 when (loadType) {
                     LoadType.REFRESH -> {
-                        postRemoteKeyDao.insert(
-                            PostRemoteKeyEntity(
-                                PostRemoteKeyEntity.KeyType.AFTER,
-                                body.first().id
+                        if (postRemoteKeyDao.isEmpty()) {
+                            postRemoteKeyDao.insert(
+                                listOf(
+                                    PostRemoteKeyEntity(
+                                        PostRemoteKeyEntity.KeyType.AFTER,
+                                        body.first().id
+                                    ),
+                                    PostRemoteKeyEntity(
+                                        PostRemoteKeyEntity.KeyType.BEFORE,
+                                        body.last().id
+                                    )
+                                )
                             )
-                        )
+                        } else {
+                            postRemoteKeyDao.insert(
+                                PostRemoteKeyEntity(
+                                    PostRemoteKeyEntity.KeyType.AFTER,
+                                    body.first().id
+                                )
+                            )
+                        }
                     }
                     LoadType.PREPEND -> {
                         return@withTransaction
