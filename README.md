@@ -1,2 +1,2 @@
-# Домашнее задание к занятию «1.2 Architecture Components (часть 1)»
-## Задача Refresh on Login/Logout
+# Домашнее задание к занятию «1.3 Architecture Components (часть 2)»
+## Задача Refresh to Prepend
