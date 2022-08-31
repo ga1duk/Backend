@@ -16,14 +16,15 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.nmedia.R
-import ru.netology.nmedia.ui.NewPostFragment.Companion.textArg
-import ru.netology.nmedia.ui.PostAttachmentFragment.Companion.stringArg
-import ru.netology.nmedia.ui.dialog.SignInDialogFragment
 import ru.netology.nmedia.adapter.OnInteractionListener
+import ru.netology.nmedia.adapter.PostLoadingStateAdapter
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.repository.UserIdRepository
+import ru.netology.nmedia.ui.NewPostFragment.Companion.textArg
+import ru.netology.nmedia.ui.PostAttachmentFragment.Companion.stringArg
+import ru.netology.nmedia.ui.dialog.SignInDialogFragment
 import ru.netology.nmedia.viewmodel.PostViewModel
 import javax.inject.Inject
 
@@ -91,7 +92,20 @@ class FeedFragment : Fragment() {
                     Bundle().apply { stringArg = post.attachment?.url })
             }
         })
-        binding.list.adapter = adapter
+        binding.list.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = PostLoadingStateAdapter(object :
+                PostLoadingStateAdapter.OnInteractionListener {
+                override fun onRetry() {
+                    adapter.retry()
+                }
+            }),
+            footer = PostLoadingStateAdapter(object :
+                PostLoadingStateAdapter.OnInteractionListener {
+                override fun onRetry() {
+                    adapter.retry()
+                }
+            })
+        )
 
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading

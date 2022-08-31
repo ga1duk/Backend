@@ -52,4 +52,5 @@
     <string name="error_check_network_connection">Проверьте ваше интернет-соединение и попробуйте заново</string>
     <string name="error_login_or_pass_unknown">Проверьте правильность введённого логина и пароля</string>
     <string name="error_login_is_occupied">Логин занят. Попробуйте другой</string>
+    <string name="button_retry">Повторить</string>
 </resources>

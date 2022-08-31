@@ -51,4 +51,5 @@
     <string name="error_check_network_connection">Check your network connection and try again</string>
     <string name="error_login_or_pass_unknown">Make sure the username and password you entered are correct</string>
     <string name="error_login_is_occupied">Login is occupied. Try another one</string>
+    <string name="button_retry">Retry</string>
 </resources>
