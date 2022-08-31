@@ -1,4 +1,4 @@
-package ru.netology.nmedia.activity
+package ru.netology.nmedia.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,25 +11,27 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
-import ru.netology.nmedia.databinding.FragmentSignInBinding
-import ru.netology.nmedia.viewmodel.SignInViewModel
+import ru.netology.nmedia.databinding.FragmentSignUpBinding
+import ru.netology.nmedia.viewmodel.SignUpViewModel
 
 @AndroidEntryPoint
-class SignInFragment : Fragment() {
+class SignUpFragment : Fragment() {
 
-    private val viewModel: SignInViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private val viewModel: SignUpViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentSignInBinding.inflate(inflater, container, false)
+        val binding = FragmentSignUpBinding.inflate(inflater, container, false)
 
-        binding.btnSignIn.setOnClickListener {
-            viewModel.updateUser(
+        binding.btnSignUp.setOnClickListener {
+            viewModel.createUser(
+                binding.etName.text.toString(),
                 binding.etLogin.text.toString(),
-                binding.etPassword.text.toString()
+                binding.etPassword.text.toString(),
+                binding.etConfirmPassword.text.toString()
             )
         }
 
@@ -37,16 +39,18 @@ class SignInFragment : Fragment() {
             if (state.unknownError) {
                 showSnackBar(binding, R.string.error_loading)
             } else if (state.emptyFieldsError) {
-                showSnackBar(binding, R.string.error_empty_login_or_pass)
+                showSnackBar(binding, R.string.error_empty_text_fields)
             } else if (state.networkError) {
                 showSnackBar(binding, R.string.error_check_network_connection)
             } else if (state.loginOrPassError) {
-                showSnackBar(binding, R.string.error_login_or_pass_unknown)
+                showSnackBar(binding, R.string.error_login_is_occupied)
+            } else if (state.passwordsNotMatchError) {
+                binding.tfConfirmPassword.error = getString(R.string.error_passwords_must_match)
             } else {
                 findNavController().navigateUp()
                 Toast.makeText(
                     requireActivity(),
-                    R.string.toast_text_successful_sign_in,
+                    R.string.toast_text_successful_register,
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -55,7 +59,7 @@ class SignInFragment : Fragment() {
         return binding.root
     }
 
-    private fun showSnackBar(binding: FragmentSignInBinding, message: Int) {
+    private fun showSnackBar(binding: FragmentSignUpBinding, message: Int) {
         Snackbar.make(
             binding.root,
             getString(message),

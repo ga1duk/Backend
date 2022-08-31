@@ -1,4 +1,4 @@
-package ru.netology.nmedia.activity.dialog
+package ru.netology.nmedia.ui.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
