@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 32
@@ -63,7 +64,7 @@ dependencies {
     def mdc_version = "1.6.1"
     def room_version = "2.4.2"
     def nav_version = "2.3.5"
-    def firebase_version = "28.4.2"
+    def firebase_version = "30.4.0"
     def play_services_base_version = "18.0.1"
     def swiperefreshlayout_version = "1.1.0"
     def glide_version = "4.13.1"
@@ -105,6 +106,9 @@ dependencies {
     implementation platform("com.google.firebase:firebase-bom:$firebase_version")
     implementation "com.google.firebase:firebase-messaging-ktx"
     implementation "com.google.android.gms:play-services-base:$play_services_base_version"
+
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefreshlayout_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
